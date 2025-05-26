@@ -2,7 +2,8 @@ import { api } from "."
 import WebApp from "@twa-dev/sdk"
 
 export async function authUser() {
-  const initData = WebApp.initData
+  const initData = WebApp.initData;
+  console.log('initData', initData);
 
   const response = await api.post('/auth', { initData })
 
