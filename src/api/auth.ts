@@ -1,18 +1,15 @@
+import { api } from "."
+import WebApp from "@twa-dev/sdk"
+
 export async function authUser() {
-  const initData = window.Telegram.WebApp.initData
+  const initData = WebApp.initData
 
-  const response = await fetch(import.meta.env.VITE_TWA_API_SERVER + '/auth', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ initData }),
-  })
+  const response = await api.post('/auth', { initData })
 
-  if (!response.ok) {
+  if (!response.status) {
     throw new Error('Auth failed')
   }
 
-  return await response.json()
+  return await response.data()
 }
 
