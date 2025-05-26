@@ -8,6 +8,8 @@ import { Button, FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
+import { useEffect } from 'react'
+import { authUser } from "./api";
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -28,6 +30,16 @@ const AppContainer = styled.div`
 
 function App() {
   const { network } = useTonConnect();
+
+  useEffect(() => {
+    authUser()
+      .then(data => {
+        console.log('User data:', data)
+      })
+      .catch(err => {
+        console.error('Auth error:', err)
+      })
+  }, [])
 
   return (
     <StyledApp>
