@@ -1,5 +1,6 @@
 import { TonConnectButton } from "@tonconnect/ui-react";
 import { Button, FlexBoxRow } from "@/components/styled/styled";
+import { Avatar } from "@/components/Avatar";
 import { CHAIN } from "@tonconnect/protocol";
 
 import { useTonConnect } from "@/hooks/useTonConnect";
@@ -11,6 +12,7 @@ export function AppHeader() {
 
   return (
     <FlexBoxRow>
+      <Avatar name={user?.first_name} photoUrl={user?.photo_url} />
       <TonConnectButton />
       <Button>
         {network
