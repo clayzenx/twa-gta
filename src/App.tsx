@@ -30,7 +30,7 @@ const AppContainer = styled.div`
 function App() {
   const { user, setUser } = useInitApp()
   //TODO: активности временно здесь
-  const { activities, loading, error } = useActivities();
+  const { activities, loading, error, reward } = useActivities();
 
   if (loading) return <div>Загрузка…</div>;
   if (error) return <div>Ошибка: {error.message}</div>;
@@ -44,7 +44,7 @@ function App() {
             <FlexBoxRow>
               <ul>
                 {(activities ?? []).map(a => (
-                  <li key={a.token}>
+                  <li key={a.token} onClick={() => reward(a.token)}>
                     <span>{a.name /* или другие поля */}</span>
                   </li>
                 ))}

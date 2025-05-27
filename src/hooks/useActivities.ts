@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { fetchActivities, Activity } from '../api/activities';
+import { fetchActivities, Activity } from '@/api/activities';
+import { reward } from '@/api/activities';
 
 /**
  * Custom hook to load activities once for an authenticated user.
@@ -10,6 +11,7 @@ export function useActivities(): {
   activities: Activity[];
   loading: boolean;
   error: Error | null;
+  reward: (token: string) => void
 } {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -41,5 +43,5 @@ export function useActivities(): {
     };
   }, []);
 
-  return { activities, loading, error };
+  return { activities, loading, error, reward };
 }
