@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 import { authUser } from '@/api/auth'
 import { getUser } from '@/api/user'
+import { User } from '@/context/UserContext'
 
 const TAG = '[useInitApp]'
 
 export function useInitApp() {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
@@ -32,6 +33,6 @@ export function useInitApp() {
     run()
   }, [])
 
-  return { user, ready }
+  return { user, ready, setUser }
 }
 

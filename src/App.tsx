@@ -8,7 +8,8 @@ import { Button, FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
-import { useInitApp } from './hooks/useInitApp'
+import { useInitApp } from '@/hooks/useInitApp'
+import { UserContext } from "@/context/UserContext"
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -29,30 +30,32 @@ const AppContainer = styled.div`
 
 function App() {
   const { network } = useTonConnect();
-  const { user, ready } = useInitApp()
+  const { user, ready, setUser } = useInitApp()
 
   return (
-    <StyledApp>
-      <AppContainer>
-        <FlexBoxCol>
-          <FlexBoxRow>
-            <TonConnectButton />
-            <Button>
-              {network
-                ? network === CHAIN.MAINNET
-                  ? "mainnet"
-                  : "testnet"
-                : "N/A"}
-            </Button>
-            <pre>{JSON.stringify(user)}</pre>
-            <pre>{JSON.stringify(ready)}</pre>
-          </FlexBoxRow>
-          <Counter />
-          <TransferTon />
-          <Jetton />
-        </FlexBoxCol>
-      </AppContainer>
-    </StyledApp>
+    <UserContext.Provider value={{ user, setUser }}>
+      <StyledApp>
+        <AppContainer>
+          <FlexBoxCol>
+            <FlexBoxRow>
+              <TonConnectButton />
+              <Button>
+                {network
+                  ? network === CHAIN.MAINNET
+                    ? "mainnet"
+                    : "testnet"
+                  : "N/A"}
+              </Button>
+              <pre>{JSON.stringify(user)}</pre>
+              <pre>{JSON.stringify(ready)}</pre>
+            </FlexBoxRow>
+            <Counter />
+            <TransferTon />
+            <Jetton />
+          </FlexBoxCol>
+        </AppContainer>
+      </StyledApp>
+    </UserContext.Provider>
   );
 }
 
