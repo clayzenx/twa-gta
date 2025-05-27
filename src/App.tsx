@@ -9,7 +9,7 @@ import { useTonConnect } from "./hooks/useTonConnect";
 import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
 import { useEffect } from 'react'
-import { authUser } from "./api";
+import { authUser } from "./api/auth";
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -32,13 +32,18 @@ function App() {
   const { network } = useTonConnect();
 
   useEffect(() => {
-    authUser()
-      .then(data => {
-        console.log('User data:', data)
-      })
-      .catch(err => {
-        console.error('Auth error:', err)
-      })
+    const run = async () => {
+      const token = localStorage.getItem('jwt')
+      console.info('Toke:', token);
+      if (!token) {
+        console.log('no token, request...')
+        const { token } = await authUser()
+        console.log('update token', token);
+        localStorage.setItem('jwt', token)
+        console.log('localStorage.getItem("jwt")', localStorage.getItem('jwt'));
+      }
+    }
+    run()
   }, [])
 
   return (

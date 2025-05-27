@@ -7,13 +7,14 @@ export async function authUser() {
     WebApp.ready()
   }
   const initData = WebApp.initData
-  console.log('initData', initData)
   // initData must be provided by Telegram Web App environment
   if (!initData) {
     throw new Error('Telegram initData is missing. Open this page in a Telegram WebApp context.')
   }
   // Send Telegram initData to backend for verification
+  console.info('Try to auth user initData:', initData)
   const response = await api.post('/auth', { initData })
+  console.info('response:', response.data)
   // axios automatically parses JSON into response.data
   return response.data
 }
