@@ -8,8 +8,7 @@ import { Button, FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
 import { useTonConnect } from "./hooks/useTonConnect";
 import { CHAIN } from "@tonconnect/protocol";
 import "@twa-dev/sdk";
-import { useEffect } from 'react'
-import { authUser } from "./api/auth";
+import { useInitApp } from './hooks/useInitApp'
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -30,21 +29,7 @@ const AppContainer = styled.div`
 
 function App() {
   const { network } = useTonConnect();
-
-  useEffect(() => {
-    const run = async () => {
-      const token = localStorage.getItem('jwt')
-      console.info('Toke:', token);
-      if (!token) {
-        console.log('no token, request...')
-        const { token } = await authUser()
-        console.log('update token', token);
-        localStorage.setItem('jwt', token)
-        console.log('localStorage.getItem("jwt")', localStorage.getItem('jwt'));
-      }
-    }
-    run()
-  }, [])
+  const { user, ready } = useInitApp()
 
   return (
     <StyledApp>
@@ -59,6 +44,8 @@ function App() {
                   : "testnet"
                 : "N/A"}
             </Button>
+            <pre>{JSON.stringify(user)}</pre>
+            <pre>{JSON.stringify(ready)}</pre>
           </FlexBoxRow>
           <Counter />
           <TransferTon />
