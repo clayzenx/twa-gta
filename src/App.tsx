@@ -56,6 +56,26 @@ function App() {
                   Daily Login
                 </Button>
               </FlexBoxRow>
+              <FlexBoxRow>
+                <Button
+                  className={'Button Active'}
+                  onClick={() => {
+                    reward(ActivityIds.REFERRAL, { referrerTelegramId: 1337 });
+                  }}
+                >
+                  Referral to 1337
+                </Button>
+              </FlexBoxRow>
+              <FlexBoxRow>
+                <Button
+                  className={'Button Active'}
+                  onClick={() => {
+                    reward(ActivityIds.REFERRAL, { referrerTelegramId: 1234567890 });
+                  }}
+                >
+                  Referral to 1234567890
+                </Button>
+              </FlexBoxRow>
               <Counter />
               <TransferTon />
               <Jetton />
