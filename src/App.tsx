@@ -4,11 +4,10 @@ import { Counter } from "@/components/Counter";
 import { Jetton } from "@/components/Jetton";
 import { TransferTon } from "@/components/TransferTon";
 import styled from "styled-components";
-import { FlexBoxCol } from "@/components/styled/styled";
+import { Button, FlexBoxCol, FlexBoxRow } from "@/components/styled/styled";
 import "@twa-dev/sdk";
 import { UserProvider } from '@/context/UserContext';
 import { ActivitiesProvider } from '@/context/ActivitiesContext';
-import { useActivitiesContext } from '@/hooks/useActivitiesContext';
 import { reward } from '@/api/activities';
 import { ActivityIds } from "@/types/activities";
 
@@ -37,8 +36,16 @@ function App() {
           <AppContainer>
             <FlexBoxCol>
               <AppHeader />
-              {/* Секция активностей */}
-              <ActivitiesSection />
+              <FlexBoxRow>
+                <Button
+                  className={'Button Active'}
+                  onClick={() => {
+                    reward(ActivityIds.WELCOME);
+                  }}
+                >
+                  Welcome Bonus
+                </Button>
+              </FlexBoxRow>
               <Counter />
               <TransferTon />
               <Jetton />
@@ -47,28 +54,6 @@ function App() {
         </StyledApp>
       </ActivitiesProvider>
     </UserProvider>
-  );
-}
-/**
- * TODO: (времено) Секция для отображения списка активностей и отправки запроса на вознаграждение
- */
-function ActivitiesSection() {
-  const { activities, loading, error, getTokenById } = useActivitiesContext();
-  if (loading) return <div>Загрузка активностей…</div>;
-  if (error) return <div>Ошибка загрузки: {error.message}</div>;
-  return (
-    <ul>
-      {activities.map((a) => (
-        <li
-          key={a.id}
-          onClick={() => {
-            reward(ActivityIds.WELCOME);
-          }}
-        >
-          {a.name}
-        </li>
-      ))}
-    </ul>
   );
 }
 
