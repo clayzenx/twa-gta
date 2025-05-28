@@ -25,11 +25,11 @@ export async function fetchActivities(): Promise<Activity[]> {
   return response.data;
 }
 
-export async function reward(token: string) {
+export async function reward(activityId: string) {
   const jwt = localStorage.getItem('jwt')
   if (!jwt) console.error(`${TAG}: no JWT token found in localStorage`)
 
-  const response = await api.post('/activities/reward', { token }, {
+  const response = await api.post('/activities/reward', { activityId }, {
     headers: { Authorization: `Bearer ${jwt}` }
   });
 

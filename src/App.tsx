@@ -62,9 +62,7 @@ function ActivitiesSection() {
         <li
           key={a.id}
           onClick={() => {
-            const token = getTokenById(ActivityIds.WELCOME);
-            console.log('getted token', token)
-            if (token) reward(token);
+            reward(ActivityIds.WELCOME);
           }}
         >
           {a.name}
