@@ -46,6 +46,16 @@ function App() {
                   Welcome Bonus
                 </Button>
               </FlexBoxRow>
+              <FlexBoxRow>
+                <Button
+                  className={'Button Active'}
+                  onClick={() => {
+                    reward(ActivityIds.DAILY_LOGIN);
+                  }}
+                >
+                  Daily Login
+                </Button>
+              </FlexBoxRow>
               <Counter />
               <TransferTon />
               <Jetton />

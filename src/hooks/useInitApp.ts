@@ -22,7 +22,6 @@ export function useInitApp() {
 
         // TODO: no type here, fix it later
         const data = await getUser()
-        console.log('getUser response data', data);
         setUser(data.user)
       } catch (err) {
         console.error('App init error:', err)

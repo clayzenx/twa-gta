@@ -1,10 +1,15 @@
 import { api } from '.';
 
+export type AvailabilityType = 'once' | 'daily' | 'conditional';
+
 export interface Activity {
   id: string;
   token: string;
   name: string,
-  reward: number
+  reward: number,
+  availability: AvailabilityType,
+  available: boolean,
+  nextAvailableAt?: Date,
 }
 
 const TAG = '[activities]'
@@ -20,16 +25,16 @@ export async function fetchActivities(): Promise<Activity[]> {
     headers: { Authorization: `Bearer ${jwt}` }
   });
 
-  console.info(`${TAG}: response.data`, response.data)
+  console.info(`${TAG}: fetch activities response.data`, response.data)
 
   return response.data;
 }
 
-export async function reward(activityId: string) {
+export async function reward(id: string) {
   const jwt = localStorage.getItem('jwt')
   if (!jwt) console.error(`${TAG}: no JWT token found in localStorage`)
 
-  const response = await api.post('/activities/reward', { activityId }, {
+  const response = await api.post('/activities/reward', { id }, {
     headers: { Authorization: `Bearer ${jwt}` }
   });
 

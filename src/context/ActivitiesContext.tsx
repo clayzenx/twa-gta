@@ -39,13 +39,12 @@ export function ActivitiesProvider({ children }: { children: ReactNode }) {
   // Создаём map: id -> Activity
   const mapById = useMemo<Record<string, Activity>>(() => {
     const m: Record<string, Activity> = {};
-    activities.forEach((a) => {
+    (activities ?? []).forEach((a) => {
       m[a.id] = a;
     });
     return m;
   }, [activities]);
 
-  console.log('mapById', mapById, ActivityIds.WELCOME, mapById[ActivityIds.WELCOME], mapById['welcome'])
 
   const getActivityById = (id: string) => mapById[id];
   const getTokenById = (id: string) => mapById[id]?.token;
