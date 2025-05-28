@@ -1,6 +1,7 @@
 import { createContext, useMemo, ReactNode } from 'react';
 import { useActivities } from '@/hooks/useActivities';
 import { Activity } from '@/api/activities';
+import { ActivityIds } from "@/types/activities";
 
 /**
  * Контекст для списка активностей и доступа к ним по человекочитаемому id.
@@ -43,6 +44,8 @@ export function ActivitiesProvider({ children }: { children: ReactNode }) {
     });
     return m;
   }, [activities]);
+
+  console.log('mapById', mapById, ActivityIds.WELCOME, mapById[ActivityIds.WELCOME], mapById['welcome'])
 
   const getActivityById = (id: string) => mapById[id];
   const getTokenById = (id: string) => mapById[id]?.token;

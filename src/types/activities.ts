@@ -1,4 +1,4 @@
-enum ActivityIds {
+export enum ActivityIds {
   WELCOME = 'welcome',
 }
 

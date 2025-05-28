@@ -1,15 +1,16 @@
 import "./App.css";
-import { AppHeader } from "./components/AppHeader";
-import { Counter } from "./components/Counter";
-import { Jetton } from "./components/Jetton";
-import { TransferTon } from "./components/TransferTon";
+import { AppHeader } from "@/components/AppHeader";
+import { Counter } from "@/components/Counter";
+import { Jetton } from "@/components/Jetton";
+import { TransferTon } from "@/components/TransferTon";
 import styled from "styled-components";
-import { FlexBoxCol } from "./components/styled/styled";
+import { FlexBoxCol } from "@/components/styled/styled";
 import "@twa-dev/sdk";
 import { UserProvider } from '@/context/UserContext';
 import { ActivitiesProvider } from '@/context/ActivitiesContext';
 import { useActivitiesContext } from '@/hooks/useActivitiesContext';
 import { reward } from '@/api/activities';
+import { ActivityIds } from "@/types/activities";
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -62,6 +63,7 @@ function ActivitiesSection() {
           key={a.id}
           onClick={() => {
             const token = getTokenById(ActivityIds.WELCOME);
+            console.log('getted token', token)
             if (token) reward(token);
           }}
         >
