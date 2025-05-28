@@ -1,6 +1,7 @@
 import { api } from '.';
 
 export interface Activity {
+  id: string;
   token: string;
   name: string,
   reward: number

@@ -4,11 +4,12 @@ import { Counter } from "./components/Counter";
 import { Jetton } from "./components/Jetton";
 import { TransferTon } from "./components/TransferTon";
 import styled from "styled-components";
-import { FlexBoxCol, FlexBoxRow } from "./components/styled/styled";
+import { FlexBoxCol } from "./components/styled/styled";
 import "@twa-dev/sdk";
-import { useInitApp } from '@/hooks/useInitApp'
-import { useActivities } from '@/hooks/useActivities'
-import { UserContext } from "@/context/UserContext"
+import { UserProvider } from '@/context/UserContext';
+import { ActivitiesProvider } from '@/context/ActivitiesContext';
+import { useActivitiesContext } from '@/hooks/useActivitiesContext';
+import { reward } from '@/api/activities';
 
 const StyledApp = styled.div`
   background-color: #e8e8e8;
@@ -28,35 +29,46 @@ const AppContainer = styled.div`
 `;
 
 function App() {
-  const { user, setUser } = useInitApp()
-  //TODO: активности временно здесь
-  const { activities, loading, error, reward } = useActivities();
-
-  if (loading) return <div>Загрузка…</div>;
-  if (error) return <div>Ошибка: {error.message}</div>;
-
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <StyledApp>
-        <AppContainer>
-          <FlexBoxCol>
-            <AppHeader />
-            <FlexBoxRow>
-              <ul>
-                {(activities ?? []).map(a => (
-                  <li key={a.token} onClick={() => reward(a.token)}>
-                    <span>{a.name /* или другие поля */}</span>
-                  </li>
-                ))}
-              </ul>
-            </FlexBoxRow>
-            <Counter />
-            <TransferTon />
-            <Jetton />
-          </FlexBoxCol>
-        </AppContainer>
-      </StyledApp>
-    </UserContext.Provider>
+    <UserProvider>
+      <ActivitiesProvider>
+        <StyledApp>
+          <AppContainer>
+            <FlexBoxCol>
+              <AppHeader />
+              {/* Секция активностей */}
+              <ActivitiesSection />
+              <Counter />
+              <TransferTon />
+              <Jetton />
+            </FlexBoxCol>
+          </AppContainer>
+        </StyledApp>
+      </ActivitiesProvider>
+    </UserProvider>
+  );
+}
+/**
+ * TODO: (времено) Секция для отображения списка активностей и отправки запроса на вознаграждение
+ */
+function ActivitiesSection() {
+  const { activities, loading, error, getTokenById } = useActivitiesContext();
+  if (loading) return <div>Загрузка активностей…</div>;
+  if (error) return <div>Ошибка загрузки: {error.message}</div>;
+  return (
+    <ul>
+      {activities.map((a) => (
+        <li
+          key={a.id}
+          onClick={() => {
+            const token = getTokenById(ActivityIds.WELCOME);
+            if (token) reward(token);
+          }}
+        >
+          {a.name}
+        </li>
+      ))}
+    </ul>
   );
 }
 

@@ -1,0 +1,4 @@
+enum ActivityIds {
+  WELCOME = 'welcome',
+}
+
