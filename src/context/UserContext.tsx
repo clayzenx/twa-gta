@@ -3,11 +3,14 @@ import { useInitApp } from '@/hooks/useInitApp';
 
 export type User = {
   id: number
-  username: string
-  first_name: string
-  last_name?: string
-  language_code?: string
-  photo_url?: string
+  telegramId: string,
+  firstName: string,
+  lastName: string,
+  username: string,
+  languageCode: string,
+  photoUrl: string,
+  balance: number,
+  createdAt: string
 }
 
 type UserContextType = {

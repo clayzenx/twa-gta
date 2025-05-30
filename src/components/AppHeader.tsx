@@ -12,7 +12,7 @@ export function AppHeader() {
 
   return (
     <FlexBoxRow>
-      <Avatar name={user?.first_name} photoUrl={user?.photo_url} />
+      <Avatar firstName={user?.firstName} photoUrl={user?.photoUrl} />
       <TonConnectButton />
       <Button>
         {network

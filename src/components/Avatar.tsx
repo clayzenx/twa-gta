@@ -7,12 +7,17 @@ const getColorFromName = (name: string) => {
   return colors[index]
 }
 
-export const Avatar = ({ name, photoUrl }: { name?: string; photoUrl?: string }) => {
+interface AvatarType {
+  photoUrl?: string,
+  firstName?: string
+}
+
+export const Avatar = ({ photoUrl, firstName }: AvatarType) => {
   if (photoUrl) {
-    return <img src={photoUrl} alt={name} className="w-10 h-10 rounded-full" />
+    return <img src={photoUrl} alt={firstName} className="w-10 h-10 rounded-full" />
   }
 
-  const initial = getInitial(name)
+  const initial = getInitial(firstName)
   const bgColor = getColorFromName(initial)
 
   return (

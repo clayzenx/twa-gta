@@ -21,8 +21,9 @@ export function useInitApp() {
         }
 
         // TODO: no type here, fix it later
-        const data = await getUser()
-        setUser(data.user)
+        const user = await getUser()
+        console.log('initApp', user);
+        setUser(user)
       } catch (err) {
         console.error('App init error:', err)
       } finally {
