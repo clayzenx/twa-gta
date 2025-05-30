@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { authUser } from '@/api/auth'
 import { getUser } from '@/api/user'
 import { User } from '@/context/UserContext'
 
@@ -12,20 +11,11 @@ export function useInitApp() {
   useEffect(() => {
     const run = async () => {
       try {
-        let token = localStorage.getItem('jwt')
-        if (!token) {
-          const result = await authUser()
-          token = result.token
-          if (token) localStorage.setItem('jwt', token)
-          else console.error(`${TAG}: cannot get token`)
-        }
-
-        // TODO: no type here, fix it later
+        // fetch user profile; if not authenticated, interceptor will call /auth and retry
         const user = await getUser()
-        console.log('initApp', user);
         setUser(user)
       } catch (err) {
-        console.error('App init error:', err)
+        console.error(`${TAG}: App init error:`, err)
       } finally {
         setReady(true)
       }

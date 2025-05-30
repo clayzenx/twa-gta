@@ -18,12 +18,7 @@ const TAG = '[activities]'
  * Fetches the list of activities for the authenticated user.
  */
 export async function fetchActivities(): Promise<Activity[]> {
-  const jwt = localStorage.getItem('jwt')
-  if (!jwt) console.error(`${TAG}: no JWT token found in localStorage`)
-
-  const response = await api.get<Activity[]>('/activities', {
-    headers: { Authorization: `Bearer ${jwt}` }
-  });
+  const response = await api.get<Activity[]>('/activities');
 
   console.info(`${TAG}: fetch activities response.data`, response.data)
 
@@ -31,12 +26,7 @@ export async function fetchActivities(): Promise<Activity[]> {
 }
 
 export async function reward(id: string, args?: Record<string, any>) {
-  const jwt = localStorage.getItem('jwt')
-  if (!jwt) console.error(`${TAG}: no JWT token found in localStorage`)
-
-  const response = await api.post('/activities/reward', { id, args }, {
-    headers: { Authorization: `Bearer ${jwt}` }
-  });
+  const response = await api.post('/activities/reward', { id, args });
 
   console.info(`${TAG} response`, response)
 

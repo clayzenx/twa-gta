@@ -4,13 +4,22 @@ import { api } from "."
 const TAG = '[user]'
 
 export async function getUser(): Promise<User> {
-  const jwt = localStorage.getItem('jwt')
-  if (!jwt) console.error(`${TAG}: no JWT token found in localStorage`)
+  const initData = window.Telegram?.WebApp?.initData;
+
+  const headers: Record<string, string> = {};
+
+  if (initData) {
+    headers['X-Telegram-InitData'] = initData;
+  }
+
   const response = await api.get<User>('/profile', {
-    headers: { Authorization: `Bearer ${jwt}` }
-  })
+    headers,
+  });
 
-  if (!response.data) console.error(`${TAG}: cannot get user data`)
+  console.info(`${TAG}: get user data`, response.data);
 
-  return response.data
+  if (!response.data) {
+    console.error(`${TAG}: cannot get user data`);
+  }
+  return response.data;
 }

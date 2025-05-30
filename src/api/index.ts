@@ -1,30 +1,12 @@
 import axios from "axios";
-import { authUser } from "./auth";
+// initialize response interceptor (retry on 401/403 via /auth)
+import { setupAuthInterceptor } from './interceptors/authInterceptor';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_TWA_API_SERVER,
-})
+  withCredentials: true,
+});
 
-// use JWT token for authorization
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('jwt')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
-  }
-  return config
-})
-
-api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
-    if (error.response?.status === 401) {
-      const isExpired = error.response?.data?.error === 'Token expired'
-
-      if (isExpired)
-        authUser()
-    }
-
-    return Promise.reject(error)
-  }
-)
+// attach auth interceptor to handle 401/403 and token refresh
+setupAuthInterceptor(api);
 
