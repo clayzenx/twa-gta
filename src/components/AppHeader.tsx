@@ -13,6 +13,8 @@ export function AppHeader() {
   return (
     <FlexBoxRow>
       <Avatar firstName={user?.firstName} photoUrl={user?.photoUrl} />
+      <span className="ml-3 mr-3">{user?.username}</span>
+      <span>{user?.balance}</span>
       <TonConnectButton />
       <Button>
         {network
