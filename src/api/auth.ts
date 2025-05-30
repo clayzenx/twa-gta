@@ -14,8 +14,11 @@ export async function authUser() {
   }
 
   // Send Telegram initData to backend for verification
-  const response = await api.post('/auth', { initData })
-
-  return response.data
+  const response = await api.post('/auth', { initData });
+  const data = response.data as { token?: string };
+  if (data.token) {
+    localStorage.setItem('token', data.token);
+  }
+  return data;
 }
 
