@@ -1,8 +1,7 @@
 import "./App.css";
 import { AppHeader } from "@/components/AppHeader";
-import { Counter } from "@/components/Counter";
-import { Jetton } from "@/components/Jetton";
-import { TransferTon } from "@/components/TransferTon";
+import { GameCanvas } from "@/components/GameCanvas";
+import { Loader } from "@react-three/drei"
 import styled from "styled-components";
 import { Button, FlexBoxCol, FlexBoxRow } from "@/components/styled/styled";
 import "@twa-dev/sdk";
@@ -33,9 +32,11 @@ function App() {
     <UserProvider>
       <ActivitiesProvider>
         <StyledApp>
+          <Loader />
           <AppContainer>
             <FlexBoxCol>
               <AppHeader />
+              <GameCanvas />
               <FlexBoxRow>
                 <Button
                   className={'Button Active'}
@@ -45,8 +46,6 @@ function App() {
                 >
                   Welcome Bonus
                 </Button>
-              </FlexBoxRow>
-              <FlexBoxRow>
                 <Button
                   className={'Button Active'}
                   onClick={() => {
@@ -55,8 +54,6 @@ function App() {
                 >
                   Daily Login
                 </Button>
-              </FlexBoxRow>
-              <FlexBoxRow>
                 <Button
                   className={'Button Active'}
                   onClick={() => {
@@ -65,8 +62,6 @@ function App() {
                 >
                   Referral to 1337
                 </Button>
-              </FlexBoxRow>
-              <FlexBoxRow>
                 <Button
                   className={'Button Active'}
                   onClick={() => {
@@ -76,9 +71,6 @@ function App() {
                   Referral to 1234567890
                 </Button>
               </FlexBoxRow>
-              <Counter />
-              <TransferTon />
-              <Jetton />
             </FlexBoxCol>
           </AppContainer>
         </StyledApp>
