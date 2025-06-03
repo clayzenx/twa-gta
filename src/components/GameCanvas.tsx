@@ -7,13 +7,12 @@ import { IsometricCamera } from './game/IsometricCamera'
 import { GameUI } from './game/GameUI'
 import { GameControls } from './game/GameControls'
 import { MobileControls } from './game/MobileControls'
-import { Position, Character, GameState } from '../types/game'
-
+import { GameState } from '../types/game'
 
 // Основная игровая логика
-function GameLogic({ mobileMovement, isMobileMoving }: { 
-  mobileMovement: { x: number, z: number }, 
-  isMobileMoving: boolean 
+function GameLogic({ mobileMovement, isMobileMoving }: {
+  mobileMovement: { x: number, z: number },
+  isMobileMoving: boolean
 }) {
   const [gameState, setGameState] = useState<GameState>({
     player: {
@@ -276,14 +275,14 @@ export function GameCanvas() {
           shadow-camera-top={20}
           shadow-camera-bottom={-20}
         />
-        <GameLogic 
+        <GameLogic
           mobileMovement={mobileMovement}
           isMobileMoving={isMobileMoving}
         />
       </Canvas>
 
       <GameControls />
-      
+
       {isTouchDevice && (
         <MobileControls
           onMove={handleMobileMove}
