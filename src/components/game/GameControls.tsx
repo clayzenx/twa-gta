@@ -1,4 +1,12 @@
 export function GameControls() {
+  // Проверяем, есть ли поддержка touch (мобильное устройство)
+  const isTouchDevice = 'ontouchstart' in window
+
+  // На touch устройствах не показываем десктопные контролы
+  if (isTouchDevice) {
+    return null
+  }
+
   return (
     <div style={{
       position: 'absolute',
@@ -12,7 +20,6 @@ export function GameControls() {
     }}>
       <div>WASD/ЦФЫВ - движение</div>
       <div>Пробел - атака</div>
-      <div>Touch - движение на мобильном</div>
     </div>
   )
 }

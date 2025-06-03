@@ -6,11 +6,15 @@ import { Terrain } from './game/Terrain'
 import { IsometricCamera } from './game/IsometricCamera'
 import { GameUI } from './game/GameUI'
 import { GameControls } from './game/GameControls'
+import { MobileControls } from './game/MobileControls'
 import { Position, Character, GameState } from '../types/game'
 
 
 // Основная игровая логика
-function GameLogic() {
+function GameLogic({ mobileMovement, isMobileMoving }: { 
+  mobileMovement: { x: number, z: number }, 
+  isMobileMoving: boolean 
+}) {
   const [gameState, setGameState] = useState<GameState>({
     player: {
       position: { x: 0, z: 0 },
@@ -69,58 +73,6 @@ function GameLogic() {
     }
   }, [])
 
-  // Touch управление для мобильных
-  const [touchStart, setTouchStart] = useState<{ x: number, y: number } | null>(null)
-
-  const handleTouchStart = (event: TouchEvent) => {
-    const touch = event.touches[0]
-    setTouchStart({ x: touch.clientX, y: touch.clientY })
-  }
-
-  const handleTouchMove = (event: TouchEvent) => {
-    if (!touchStart) return
-
-    const touch = event.touches[0]
-    const deltaX = touch.clientX - touchStart.x
-    const deltaY = touch.clientY - touchStart.y
-
-    if (Math.abs(deltaX) > 20 || Math.abs(deltaY) > 20) {
-      const angle = Math.atan2(deltaX, deltaY)
-      const moveX = Math.sin(angle) * 0.3
-      const moveZ = Math.cos(angle) * 0.3
-
-      setGameState(prev => ({
-        ...prev,
-        player: {
-          ...prev.player,
-          position: {
-            x: prev.player.position.x + moveX,
-            z: prev.player.position.z + moveZ
-          }
-        }
-      }))
-
-      setPlayerRotation(-angle)
-      setIsMoving(true)
-    }
-  }
-
-  const handleTouchEnd = () => {
-    setTouchStart(null)
-    setIsMoving(false)
-  }
-
-  useEffect(() => {
-    window.addEventListener('touchstart', handleTouchStart)
-    window.addEventListener('touchmove', handleTouchMove)
-    window.addEventListener('touchend', handleTouchEnd)
-
-    return () => {
-      window.removeEventListener('touchstart', handleTouchStart)
-      window.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('touchend', handleTouchEnd)
-    }
-  }, [touchStart])
 
   // Обновление игры
   useFrame((state, delta) => {
@@ -131,6 +83,7 @@ function GameLogic() {
     let moveZ = 0
     let moving = false
 
+    // Клавиатурное управление
     if (keysPressed.current.has('w') || keysPressed.current.has('ц')) {
       moveZ -= 1
       moving = true
@@ -145,6 +98,13 @@ function GameLogic() {
     }
     if (keysPressed.current.has('d') || keysPressed.current.has('в')) {
       moveX += 1
+      moving = true
+    }
+
+    // Мобильное управление
+    if (isMobileMoving) {
+      moveX += mobileMovement.x
+      moveZ += mobileMovement.z
       moving = true
     }
 
@@ -270,6 +230,27 @@ function GameLogic() {
 }
 
 export function GameCanvas() {
+  const [mobileMovement, setMobileMovement] = useState({ x: 0, z: 0 })
+  const [isMobileMoving, setIsMobileMoving] = useState(false)
+
+  const handleMobileMove = (direction: { x: number, z: number }) => {
+    setMobileMovement(direction)
+    setIsMobileMoving(true)
+  }
+
+  const handleMobileStopMove = () => {
+    setMobileMovement({ x: 0, z: 0 })
+    setIsMobileMoving(false)
+  }
+
+  // Проверяем, есть ли поддержка touch (мобильное устройство)
+  const isTouchDevice = 'ontouchstart' in window
+
+  const handleMobileAttack = () => {
+    // Этот обработчик будет передан в GameLogic через context или ref
+    console.log('Mobile attack triggered')
+  }
+
   return (
     <div style={{ position: 'relative', width: '100%', height: '500px' }}>
       <Canvas
@@ -295,10 +276,21 @@ export function GameCanvas() {
           shadow-camera-top={20}
           shadow-camera-bottom={-20}
         />
-        <GameLogic />
+        <GameLogic 
+          mobileMovement={mobileMovement}
+          isMobileMoving={isMobileMoving}
+        />
       </Canvas>
 
       <GameControls />
+      
+      {isTouchDevice && (
+        <MobileControls
+          onMove={handleMobileMove}
+          onAttack={handleMobileAttack}
+          onStopMove={handleMobileStopMove}
+        />
+      )}
     </div>
   )
 }

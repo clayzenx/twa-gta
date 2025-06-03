@@ -6,6 +6,9 @@ interface TelegramWebApp {
   close(): void
   expand(): void
   isExpanded: boolean
+  ready(): void
+  disableVerticalSwipes(): void
+  setHeaderColor(color: string): void
   MainButton: {
     setText(text: string): void
     onClick(callback: () => void): void
