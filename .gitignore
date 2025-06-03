@@ -26,3 +26,7 @@ dist-ssr
 *.sw?
 
 db/
+
+# package-locks
+*.lock
+package-lock.json
