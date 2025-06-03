@@ -26,7 +26,7 @@ function GameLogic() {
         maxHealth={player.maxHealth}
         rotation={playerRotation}
       />
-      {enemies.map(enemy => (
+      {enemies.map((enemy) => (
         <Enemy
           key={enemy.id}
           enemy={enemy}

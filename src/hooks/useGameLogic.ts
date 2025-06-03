@@ -1,23 +1,23 @@
 import { useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useGameStore } from '../store/gameStore'
-import { Position } from '../store/types'
+import { useGameStore, GameStore } from '../store/gameStore'
+import { Position, Enemy } from '../store/types'
 
 export function useGameLogic() {
-  const gameRunning = useGameStore(state => state.gameRunning)
-  const player = useGameStore(state => state.player)
-  const enemies = useGameStore(state => state.enemies)
-  const input = useGameStore(state => state.input)
+  const gameRunning = useGameStore((state: GameStore) => state.gameRunning)
+  const player = useGameStore((state: GameStore) => state.player)
+  const enemies = useGameStore((state: GameStore) => state.enemies)
+  const input = useGameStore((state: GameStore) => state.input)
   
-  const updatePlayerPosition = useGameStore(state => state.updatePlayerPosition)
-  const updatePlayerHealth = useGameStore(state => state.updatePlayerHealth)
-  const setPlayerAttacking = useGameStore(state => state.setPlayerAttacking)
-  const resetPlayerAttack = useGameStore(state => state.resetPlayerAttack)
+  const updatePlayerPosition = useGameStore((state: GameStore) => state.updatePlayerPosition)
+  const updatePlayerHealth = useGameStore((state: GameStore) => state.updatePlayerHealth)
+  const setPlayerAttacking = useGameStore((state: GameStore) => state.setPlayerAttacking)
+  const resetPlayerAttack = useGameStore((state: GameStore) => state.resetPlayerAttack)
   
-  const updateEnemyPosition = useGameStore(state => state.updateEnemyPosition)
-  const updateEnemyHealth = useGameStore(state => state.updateEnemyHealth)
-  const setEnemyAttacking = useGameStore(state => state.setEnemyAttacking)
-  const removeEnemy = useGameStore(state => state.removeEnemy)
+  const updateEnemyPosition = useGameStore((state: GameStore) => state.updateEnemyPosition)
+  const updateEnemyHealth = useGameStore((state: GameStore) => state.updateEnemyHealth)
+  const setEnemyAttacking = useGameStore((state: GameStore) => state.setEnemyAttacking)
+  const removeEnemy = useGameStore((state: GameStore) => state.removeEnemy)
   
   const resetPlayerAttackRef = useRef(resetPlayerAttack)
   resetPlayerAttackRef.current = resetPlayerAttack
@@ -42,7 +42,7 @@ export function useGameLogic() {
         
         // Проверяем врагов в радиусе атаки
         let hasAttacked = false
-        enemies.forEach(enemy => {
+        enemies.forEach((enemy: Enemy) => {
           const distance = Math.sqrt(
             Math.pow(enemy.position.x - player.position.x, 2) +
             Math.pow(enemy.position.z - player.position.z, 2)
@@ -72,7 +72,7 @@ export function useGameLogic() {
     }
 
     // ИИ врагов
-    enemies.forEach(enemy => {
+    enemies.forEach((enemy: Enemy) => {
       // Вычисляем расстояние до игрока
       const distance = Math.sqrt(
         Math.pow(enemy.position.x - player.position.x, 2) +

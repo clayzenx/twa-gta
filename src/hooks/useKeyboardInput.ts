@@ -1,12 +1,12 @@
 import { useEffect, useRef } from 'react'
-import { useGameStore } from '../store/gameStore'
+import { useGameStore, GameStore } from '../store/gameStore'
 
 export function useKeyboardInput() {
   const keysPressed = useRef<Set<string>>(new Set())
   
-  const setPlayerMovement = useGameStore(state => state.setPlayerMovement)
-  const stopPlayerMovement = useGameStore(state => state.stopPlayerMovement)
-  const triggerPlayerAttack = useGameStore(state => state.triggerPlayerAttack)
+  const setPlayerMovement = useGameStore((state: GameStore) => state.setPlayerMovement)
+  const stopPlayerMovement = useGameStore((state: GameStore) => state.stopPlayerMovement)
+  const triggerPlayerAttack = useGameStore((state: GameStore) => state.triggerPlayerAttack)
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
