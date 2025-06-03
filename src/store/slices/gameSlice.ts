@@ -15,34 +15,26 @@ export const createGameSlice: StateCreator<
   [],
   [],
   GameSlice
-> = (set) => ({
+> = (set, get) => ({
   gameRunning: true,
 
   setGameRunning: (running: boolean) =>
     set(
-      { gameRunning: running },
-      false,
-      'setGameRunning'
+      { gameRunning: running }
     ),
 
   startGame: () =>
     set(
-      { gameRunning: true },
-      false,
-      'startGame'
+      { gameRunning: true }
     ),
 
   pauseGame: () =>
     set(
-      { gameRunning: false },
-      false,
-      'pauseGame'
+      { gameRunning: false }
     ),
 
   stopGame: () =>
     set(
-      { gameRunning: false },
-      false,
-      'stopGame'
+      { gameRunning: false }
     )
 })

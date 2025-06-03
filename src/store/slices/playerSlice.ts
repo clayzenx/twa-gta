@@ -26,7 +26,7 @@ export const createPlayerSlice: StateCreator<
   [],
   [],
   PlayerSlice
-> = (set) => ({
+> = (set, get) => ({
   player: initialPlayerState,
 
   updatePlayerPosition: (position: Position) =>
@@ -36,9 +36,7 @@ export const createPlayerSlice: StateCreator<
           ...state.player,
           position
         }
-      }),
-      false,
-      'updatePlayerPosition'
+      })
     ),
 
   updatePlayerHealth: (health: number) =>
@@ -48,9 +46,7 @@ export const createPlayerSlice: StateCreator<
           ...state.player,
           health: Math.max(0, Math.min(health, state.player.maxHealth))
         }
-      }),
-      false,
-      'updatePlayerHealth'
+      })
     ),
 
   setPlayerAttacking: (isAttacking: boolean) =>
@@ -61,9 +57,7 @@ export const createPlayerSlice: StateCreator<
           isAttacking,
           lastAttackTime: isAttacking ? Date.now() : state.player.lastAttackTime
         }
-      }),
-      false,
-      'setPlayerAttacking'
+      })
     ),
 
   resetPlayerAttack: () =>
@@ -73,8 +67,6 @@ export const createPlayerSlice: StateCreator<
           ...state.player,
           isAttacking: false
         }
-      }),
-      false,
-      'resetPlayerAttack'
+      })
     )
 })

@@ -3,7 +3,7 @@ import { Enemy, Position } from '../types'
 
 export interface EnemiesSlice {
   enemies: Enemy[]
-  
+
   // Enemy actions
   updateEnemyPosition: (enemyId: string, position: Position) => void
   updateEnemyHealth: (enemyId: string, health: number) => void
@@ -40,7 +40,7 @@ export const createEnemiesSlice: StateCreator<
   [],
   [],
   EnemiesSlice
-> = (set) => ({
+> = (set, get) => ({
   enemies: initialEnemies,
 
   updateEnemyPosition: (enemyId: string, position: Position) =>
@@ -51,9 +51,7 @@ export const createEnemiesSlice: StateCreator<
             ? { ...enemy, position }
             : enemy
         )
-      }),
-      false,
-      'updateEnemyPosition'
+      })
     ),
 
   updateEnemyHealth: (enemyId: string, health: number) =>
@@ -64,9 +62,7 @@ export const createEnemiesSlice: StateCreator<
             ? { ...enemy, health: Math.max(0, Math.min(health, enemy.maxHealth)) }
             : enemy
         )
-      }),
-      false,
-      'updateEnemyHealth'
+      })
     ),
 
   setEnemyAttacking: (enemyId: string, isAttacking: boolean) =>
@@ -74,33 +70,27 @@ export const createEnemiesSlice: StateCreator<
       (state) => ({
         enemies: state.enemies.map(enemy =>
           enemy.id === enemyId
-            ? { 
-                ...enemy, 
-                isAttacking, 
-                lastAttackTime: isAttacking ? Date.now() : enemy.lastAttackTime 
-              }
+            ? {
+              ...enemy,
+              isAttacking,
+              lastAttackTime: isAttacking ? Date.now() : enemy.lastAttackTime
+            }
             : enemy
         )
-      }),
-      false,
-      'setEnemyAttacking'
+      })
     ),
 
   removeEnemy: (enemyId: string) =>
     set(
       (state) => ({
         enemies: state.enemies.filter(enemy => enemy.id !== enemyId)
-      }),
-      false,
-      'removeEnemy'
+      })
     ),
 
   addEnemy: (enemy: Enemy) =>
     set(
       (state) => ({
         enemies: [...state.enemies, enemy]
-      }),
-      false,
-      'addEnemy'
+      })
     )
 })

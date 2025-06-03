@@ -22,7 +22,7 @@ export const createInputSlice: StateCreator<
   [],
   [],
   InputSlice
-> = (set) => ({
+> = (set, get) => ({
   input: initialInputState,
 
   setPlayerMovement: (x: number, z: number) =>
@@ -33,9 +33,7 @@ export const createInputSlice: StateCreator<
           movement: { x, z },
           isMoving: true
         }
-      }),
-      false,
-      'setPlayerMovement'
+      })
     ),
 
   stopPlayerMovement: () =>
@@ -46,9 +44,7 @@ export const createInputSlice: StateCreator<
           movement: { x: 0, z: 0 },
           isMoving: false
         }
-      }),
-      false,
-      'stopPlayerMovement'
+      })
     ),
 
   triggerPlayerAttack: () =>
@@ -58,9 +54,7 @@ export const createInputSlice: StateCreator<
           ...state.input,
           attackPressed: true
         }
-      }),
-      false,
-      'triggerPlayerAttack'
+      })
     ),
 
   resetPlayerAttack: () =>
@@ -70,8 +64,6 @@ export const createInputSlice: StateCreator<
           ...state.input,
           attackPressed: false
         }
-      }),
-      false,
-      'resetPlayerAttack'
+      })
     )
 })
