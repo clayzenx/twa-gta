@@ -29,7 +29,7 @@ function tgConfig() {
       tg.expand();
 
       // Отключаем вертикальные свайпы
-      tg.disableVerticalSwipes();
+      // tg.disableVerticalSwipes();
 
       // Устанавливаем цвет темы
       tg.setHeaderColor('#000000');
