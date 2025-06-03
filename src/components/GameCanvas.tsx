@@ -231,6 +231,7 @@ function GameLogic({ mobileMovement, isMobileMoving }: {
 export function GameCanvas() {
   const [mobileMovement, setMobileMovement] = useState({ x: 0, z: 0 })
   const [isMobileMoving, setIsMobileMoving] = useState(false)
+  const [mobileAttackTrigger, setMobileAttackTrigger] = useState(0)
 
   const handleMobileMove = (direction: { x: number, z: number }) => {
     setMobileMovement(direction)
@@ -246,8 +247,7 @@ export function GameCanvas() {
   const isTouchDevice = 'ontouchstart' in window
 
   const handleMobileAttack = () => {
-    // Этот обработчик будет передан в GameLogic через context или ref
-    console.log('Mobile attack triggered')
+    setMobileAttackTrigger(prev => prev + 1)
   }
 
   return (

@@ -1,6 +1,6 @@
 import "./App.css";
 import { AppHeader } from "@/components/AppHeader";
-import { GameCanvas } from "@/components/GameCanvas";
+import { NewGameCanvas } from "@/components/NewGameCanvas";
 import { Loader } from "@react-three/drei"
 import { FlexBoxCol, StyledApp, AppContainer } from "@/components/styled/styled";
 import "@twa-dev/sdk";
@@ -16,7 +16,7 @@ function App() {
           <AppContainer>
             <FlexBoxCol>
               <AppHeader />
-              <GameCanvas />
+              <NewGameCanvas />
             </FlexBoxCol>
           </AppContainer>
         </StyledApp>
