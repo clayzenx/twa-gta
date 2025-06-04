@@ -1,5 +1,6 @@
 {
   "name": "ton-starter-twa-vite",
+  "homepage": "https://clayzenx.github.io/twa-gta",
   "private": true,
   "version": "0.0.0",
   "type": "module",

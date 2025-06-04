@@ -2,10 +2,6 @@ import { api } from "."
 import WebApp from "@twa-dev/sdk"
 
 export async function authUser() {
-  // Notify Telegram Web App that the page is ready (optional)
-  if (WebApp.ready) {
-    WebApp.ready()
-  }
 
   const initData = WebApp.initData
   // initData must be provided by Telegram Web App environment
