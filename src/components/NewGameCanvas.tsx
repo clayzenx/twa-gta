@@ -9,6 +9,7 @@ import { MobileControls } from './game/MobileControls'
 import { useGameLogic } from '../hooks/useGameLogic'
 import { useKeyboardInput } from '../hooks/useKeyboardInput'
 import { useMobileInput } from '../hooks/useMobileInput'
+import { useErrorBoundary } from 'use-error-boundary'
 
 // Основная игровая логика теперь в отдельном компоненте
 function GameLogic() {
@@ -31,7 +32,7 @@ function GameLogic() {
           key={enemy.id}
           enemy={enemy}
           playerPosition={player.position}
-          onAttack={() => {}} // Теперь обрабатывается в useGameLogic
+          onAttack={() => { }} // Теперь обрабатывается в useGameLogic
         />
       ))}
 
@@ -45,6 +46,8 @@ function GameLogic() {
 }
 
 export function NewGameCanvas() {
+  const { ErrorBoundary, didCatch, error } = useErrorBoundary()
+
   // Инициализируем обработчики ввода
   useKeyboardInput()
   const mobileInput = useMobileInput()
@@ -52,7 +55,9 @@ export function NewGameCanvas() {
   // Проверяем, есть ли поддержка touch (мобильное устройство)
   const isTouchDevice = 'ontouchstart' in window
 
-  return (
+  return didCatch ? (
+    <div>{error.message}</div>
+  ) : (
     <div style={{ position: 'relative', width: '100%', height: '500px' }}>
       <Canvas
         shadows
@@ -64,7 +69,7 @@ export function NewGameCanvas() {
         }}
         style={{ width: '100%', height: '100%' }}
       >
-        <ambientLight intensity={0.4} />
+        <ambientLight intensity={0.7} />
         <directionalLight
           position={[10, 10, 5]}
           intensity={1}
@@ -80,15 +85,16 @@ export function NewGameCanvas() {
         <GameLogic />
       </Canvas>
 
-      <GameControls />
-
-      {isTouchDevice && (
+      {isTouchDevice ? (
         <MobileControls
           onMove={mobileInput.handleMove}
           onAttack={mobileInput.handleAttack}
           onStopMove={mobileInput.handleStopMove}
         />
+      ) : (
+        <GameControls />
       )}
+
     </div>
   )
 }

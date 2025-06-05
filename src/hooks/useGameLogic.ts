@@ -8,17 +8,17 @@ export function useGameLogic() {
   const player = useGameStore((state: GameStore) => state.player)
   const enemies = useGameStore((state: GameStore) => state.enemies)
   const input = useGameStore((state: GameStore) => state.input)
-  
+
   const updatePlayerPosition = useGameStore((state: GameStore) => state.updatePlayerPosition)
   const updatePlayerHealth = useGameStore((state: GameStore) => state.updatePlayerHealth)
   const setPlayerAttacking = useGameStore((state: GameStore) => state.setPlayerAttacking)
   const resetPlayerAttack = useGameStore((state: GameStore) => state.resetPlayerAttack)
-  
+
   const updateEnemyPosition = useGameStore((state: GameStore) => state.updateEnemyPosition)
   const updateEnemyHealth = useGameStore((state: GameStore) => state.updateEnemyHealth)
   const setEnemyAttacking = useGameStore((state: GameStore) => state.setEnemyAttacking)
   const removeEnemy = useGameStore((state: GameStore) => state.removeEnemy)
-  
+
   const resetPlayerAttackRef = useRef(resetPlayerAttack)
   resetPlayerAttackRef.current = resetPlayerAttack
 
@@ -39,7 +39,7 @@ export function useGameLogic() {
     if (input.attackPressed) {
       const now = Date.now()
       if (now - player.lastAttackTime > 800) { // 0.8 секунды cooldown
-        
+
         // Проверяем врагов в радиусе атаки
         let hasAttacked = false
         enemies.forEach((enemy: Enemy) => {
@@ -62,7 +62,7 @@ export function useGameLogic() {
 
         if (hasAttacked || true) { // Анимация атаки даже если не попали
           setPlayerAttacking(true)
-          
+
           // Сброс анимации атаки через 300мс
           setTimeout(() => {
             resetPlayerAttackRef.current()
@@ -86,7 +86,7 @@ export function useGameLogic() {
         if (now - enemy.lastAttackTime > 1200) { // 1.2 секунды cooldown для врагов
           setEnemyAttacking(enemy.id, true)
           updatePlayerHealth(player.health - 15)
-          
+
           // Сброс анимации атаки врага через 400мс
           setTimeout(() => {
             setEnemyAttacking(enemy.id, false)
@@ -98,7 +98,7 @@ export function useGameLogic() {
           x: player.position.x - enemy.position.x,
           z: player.position.z - enemy.position.z
         }
-        
+
         // Нормализуем направление
         const length = Math.sqrt(direction.x * direction.x + direction.z * direction.z)
         if (length > 0) {
@@ -110,7 +110,7 @@ export function useGameLogic() {
           x: enemy.position.x + direction.x * enemy.speed * delta,
           z: enemy.position.z + direction.z * enemy.speed * delta
         }
-        
+
         updateEnemyPosition(enemy.id, newPosition)
       }
     })

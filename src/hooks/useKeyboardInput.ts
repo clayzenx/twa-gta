@@ -3,7 +3,7 @@ import { useGameStore, GameStore } from '../store/gameStore'
 
 export function useKeyboardInput() {
   const keysPressed = useRef<Set<string>>(new Set())
-  
+
   const setPlayerMovement = useGameStore((state: GameStore) => state.setPlayerMovement)
   const stopPlayerMovement = useGameStore((state: GameStore) => state.stopPlayerMovement)
   const triggerPlayerAttack = useGameStore((state: GameStore) => state.triggerPlayerAttack)
@@ -12,10 +12,10 @@ export function useKeyboardInput() {
     const handleKeyDown = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase()
       keysPressed.current.add(key)
-      
+
       // Обработка движения
       updateMovement()
-      
+
       // Обработка атаки
       if (key === ' ') {
         event.preventDefault()
@@ -26,7 +26,7 @@ export function useKeyboardInput() {
     const handleKeyUp = (event: KeyboardEvent) => {
       const key = event.key.toLowerCase()
       keysPressed.current.delete(key)
-      
+
       // Обновляем движение при отпускании клавиш
       updateMovement()
     }
@@ -38,15 +38,19 @@ export function useKeyboardInput() {
       // WASD и русская раскладка
       if (keysPressed.current.has('w') || keysPressed.current.has('ц')) {
         moveZ -= 1
+        moveX -= 1
       }
       if (keysPressed.current.has('s') || keysPressed.current.has('ы')) {
         moveZ += 1
+        moveX += 1
       }
       if (keysPressed.current.has('a') || keysPressed.current.has('ф')) {
         moveX -= 1
+        moveZ += 1
       }
       if (keysPressed.current.has('d') || keysPressed.current.has('в')) {
         moveX += 1
+        moveZ -= 1
       }
 
       // Нормализуем вектор движения

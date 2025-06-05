@@ -1,12 +1,4 @@
 export function GameControls() {
-  // Проверяем, есть ли поддержка touch (мобильное устройство)
-  const isTouchDevice = 'ontouchstart' in window
-
-  // На touch устройствах не показываем десктопные контролы
-  if (isTouchDevice) {
-    return null
-  }
-
   return (
     <div style={{
       position: 'absolute',
