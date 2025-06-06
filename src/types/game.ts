@@ -9,8 +9,19 @@ export interface Character {
   maxHealth: number
   attackRange: number
   speed: number
+  baseDamage: number
   isAttacking: boolean
   lastAttackTime: number
+}
+
+export interface Enemy extends Character {
+  id: string
+}
+
+export interface GameInput {
+  movement: { x: number, z: number }
+  isMoving: boolean,
+  attackPressed: boolean
 }
 
 export interface GameState {

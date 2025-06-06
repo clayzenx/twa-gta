@@ -1,9 +1,9 @@
 import { StateCreator } from 'zustand'
-import { GameInput, Position } from '../types'
+import { GameInput } from '@/types/game'
 
 export interface InputSlice {
   input: GameInput
-  
+
   // Input actions
   setPlayerMovement: (x: number, z: number) => void
   stopPlayerMovement: () => void

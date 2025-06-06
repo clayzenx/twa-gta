@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
-import { useGameStore, GameStore } from '../store/gameStore'
-import { Position, Enemy } from '../store/types'
+import { useGameStore, GameStore } from '@/store/gameStore'
+import { Enemy } from '@/types/game'
+import { isInRange } from '@/utils/math'
 
 export function useGameLogic() {
   const gameRunning = useGameStore((state: GameStore) => state.gameRunning)
@@ -33,6 +34,21 @@ export function useGameLogic() {
         z: player.position.z + input.movement.z * player.speed * delta
       }
       updatePlayerPosition(newPosition)
+    }
+
+    let enemyInRange = false;
+
+    // Проверка близости к врагам
+    enemies.forEach(enemy => {
+      if (isInRange(player.position, enemy.position, player.attackRange)) {
+        enemyInRange = true;
+      }
+    });
+
+    if (enemyInRange) {
+      setPlayerAttacking(true);
+    } else {
+      setPlayerAttacking(false);
     }
 
     // Обработка атаки игрока
@@ -85,7 +101,7 @@ export function useGameLogic() {
         const now = Date.now()
         if (now - enemy.lastAttackTime > 1200) { // 1.2 секунды cooldown для врагов
           setEnemyAttacking(enemy.id, true)
-          updatePlayerHealth(player.health - 15)
+          updatePlayerHealth(player.health - enemy.baseDamage)
 
           // Сброс анимации атаки врага через 400мс
           setTimeout(() => {

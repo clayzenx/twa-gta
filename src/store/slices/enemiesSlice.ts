@@ -1,5 +1,5 @@
 import { StateCreator } from 'zustand'
-import { Enemy, Position } from '../types'
+import { Enemy, Position } from '@/types/game'
 
 export interface EnemiesSlice {
   enemies: Enemy[]
@@ -21,7 +21,8 @@ const initialEnemies: Enemy[] = [
     attackRange: 1.5,
     speed: 3,
     isAttacking: false,
-    lastAttackTime: 0
+    lastAttackTime: 0,
+    baseDamage: 10
   },
   {
     id: 'enemy2',
@@ -31,7 +32,8 @@ const initialEnemies: Enemy[] = [
     attackRange: 1.5,
     speed: 2.5,
     isAttacking: false,
-    lastAttackTime: 0
+    lastAttackTime: 0,
+    baseDamage: 10
   }
 ]
 

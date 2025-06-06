@@ -1,9 +1,9 @@
 import { StateCreator } from 'zustand'
-import { Character, Position } from '../types'
+import { Character, Position } from '@/types/game'
 
 export interface PlayerSlice {
   player: Character
-  
+
   // Player actions
   updatePlayerPosition: (position: Position) => void
   updatePlayerHealth: (health: number) => void
@@ -13,10 +13,11 @@ export interface PlayerSlice {
 
 const initialPlayerState: Character = {
   position: { x: 0, z: 0 },
-  health: 100,
-  maxHealth: 100,
+  health: 1000,
+  maxHealth: 1000,
   attackRange: 2,
   speed: 5,
+  baseDamage: 10,
   isAttacking: false,
   lastAttackTime: 0
 }
