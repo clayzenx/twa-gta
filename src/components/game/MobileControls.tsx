@@ -27,11 +27,11 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
 
   const handleJoystickStart = useCallback((clientX: number, clientY: number, touchId?: number) => {
     if (!joystickRef.current) return
-    
+
     const rect = joystickRef.current.getBoundingClientRect()
     const centerX = rect.left + rect.width / 2
     const centerY = rect.top + rect.height / 2
-    
+
     setJoystick({
       isDragging: true,
       startPos: { x: centerX, y: centerY },
@@ -46,10 +46,10 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
     const deltaX = clientX - joystick.startPos.x
     const deltaY = clientY - joystick.startPos.y
     const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-    
+
     let x = deltaX
     let z = deltaY
-    
+
     if (distance > maxDistance) {
       x = (deltaX / distance) * maxDistance
       z = (deltaY / distance) * maxDistance
@@ -63,7 +63,7 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
     // Нормализуем для игры (правильные направления: вверх = вперед, вправо = вправо)
     const normalizedX = x / maxDistance
     const normalizedZ = z / maxDistance
-    
+
     if (Math.abs(normalizedX) > 0.1 || Math.abs(normalizedZ) > 0.1) {
       onMove({ x: normalizedX, z: normalizedZ })
     }
@@ -79,28 +79,11 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
     onStopMove()
   }, [onStopMove])
 
-  // Сброс состояния через timeout если touch зависает
-  useEffect(() => {
-    let timeoutId: NodeJS.Timeout
-    
-    if (joystick.isDragging) {
-      timeoutId = setTimeout(() => {
-        handleJoystickEnd()
-      }, 5000) // Сброс через 5 секунд
-    }
-
-    return () => {
-      if (timeoutId) {
-        clearTimeout(timeoutId)
-      }
-    }
-  }, [joystick.isDragging, handleJoystickEnd])
-
   // Touch события для джойстика с поддержкой multi-touch
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     // Находим первый touch который не используется другими элементами
     const touch = e.touches[0]
     handleJoystickStart(touch.clientX, touch.clientY, touch.identifier)
@@ -110,7 +93,7 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
     e.preventDefault()
     e.stopPropagation()
     if (!joystick.isDragging || joystick.touchId === null) return
-    
+
     // Ищем наш конкретный touch по ID
     const touch = Array.from(e.touches).find(t => t.identifier === joystick.touchId)
     if (touch) {
@@ -121,7 +104,7 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
   const handleTouchEnd = (e: React.TouchEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    
+
     // Проверяем, завершился ли именно наш touch
     const touchEnded = Array.from(e.changedTouches).some(t => t.identifier === joystick.touchId)
     if (touchEnded) {
@@ -181,15 +164,13 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
 
   // Вычисляем позицию knob
   const knobStyle = joystick.isDragging && joystickRef.current ? {
-    transform: `translate(${
-      joystick.currentPos.x - joystick.startPos.x
-    }px, ${
-      joystick.currentPos.y - joystick.startPos.y
-    }px)`
+    transform: `translate(${joystick.currentPos.x - joystick.startPos.x
+      }px, ${joystick.currentPos.y - joystick.startPos.y
+      }px)`
   } : {}
 
   return (
-    <div 
+    <div
       data-game-control
       style={{
         position: 'absolute',
@@ -239,7 +220,7 @@ export function MobileControls({ onMove, onAttack, onStopMove }: MobileControlsP
             ...knobStyle
           }}
         />
-        
+
         {/* Иконка движения в центре */}
         <div style={{
           position: 'absolute',

@@ -78,11 +78,6 @@ export function useGameLogic() {
 
         if (hasAttacked || true) { // Анимация атаки даже если не попали
           setPlayerAttacking(true)
-
-          // Сброс анимации атаки через 300мс
-          setTimeout(() => {
-            resetPlayerAttackRef.current()
-          }, 300)
         }
       }
     }
@@ -102,11 +97,6 @@ export function useGameLogic() {
         if (now - enemy.lastAttackTime > 1200) { // 1.2 секунды cooldown для врагов
           setEnemyAttacking(enemy.id, true)
           updatePlayerHealth(player.health - enemy.baseDamage)
-
-          // Сброс анимации атаки врага через 400мс
-          setTimeout(() => {
-            setEnemyAttacking(enemy.id, false)
-          }, 400)
         }
       } else if (distance < 10) {
         // Движение к игроку если он в зоне видимости
