@@ -33,7 +33,7 @@ export function Player({
   useAttackBehavior({
     isAttacking,
     attackAction,
-    hitTime: 0.4, // Удар произойдёт на 40% длины клипа
+    hitTime: 0.4,
     onHit: handleHit,
     onAttackComplete: () => console.log('Атака завершилась'),
   });
