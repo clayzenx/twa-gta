@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
-import { LoopOnce, AnimationAction, AnimationMixerEventMap } from "three";
+import { LoopOnce, AnimationAction, AnimationMixerEventMap, Object3D } from "three";
 import { useFrame } from "@react-three/fiber";
+import { Position } from "@/types/game"; // Убедись, что тип подключён
+import { useLookAtTarget } from "./useLookAtTarget";
 
 interface AttackBehaviorProps {
   isAttacking: boolean;
@@ -8,18 +10,16 @@ interface AttackBehaviorProps {
   hitTime?: number; // От 0 до 1. Момент удара по длительности анимации
   onHit?: () => void;
   onAttackComplete?: (e: AnimationMixerEventMap["finished"]) => void;
+  selfRef?: React.RefObject<Object3D>;
+  targetPosition?: Position;
 }
 
 /**
- * Хук, управляющий анимацией атаки и автоатакой.
+ * Хук, управляющий анимацией атаки и поворотом к цели.
  *
  * Повторяет атаку, пока `isAttacking = true`. Вызывает `onAttackComplete` при завершении каждой атаки.
- *
- * @param isAttacking - Флаг, указывающий на активную атаку.
- * @param attackAction - Анимация атаки.
- * @param hitTime - Момент удара (0–1, как часть длины клипа).
- * @param onHit - Колбэк, вызываемый в нужный момент анимации.
- * @param onAttackComplete - Колбэк, вызываемый по завершении анимации атаки.
+ * В момент `hitTime` вызывает `onHit`.
+ * Если переданы `selfRef` и `targetPosition`, поворачивает сущность к цели.
  */
 export function useAttackBehavior({
   isAttacking,
@@ -27,10 +27,19 @@ export function useAttackBehavior({
   hitTime = 0.5,
   onHit,
   onAttackComplete,
+  selfRef,
+  targetPosition,
 }: AttackBehaviorProps) {
   const duration = useRef(0);
   const startTime = useRef(0);
   const hasHit = useRef(false);
+
+  useLookAtTarget({
+    selfRef,
+    targetPosition,
+    enabled: isAttacking,
+    smooth: true,
+  });
 
   useEffect(() => {
     if (!isAttacking || !attackAction) return;
@@ -64,12 +73,12 @@ export function useAttackBehavior({
     };
   }, [isAttacking, attackAction]);
 
+  // Вызов onHit на hitTime
   useFrame(() => {
     if (!isAttacking || !attackAction || hasHit.current) return;
 
     const elapsed = (performance.now() - startTime.current) / 1000;
     const hitThreshold = duration.current * hitTime;
-
 
     if (elapsed >= hitThreshold) {
       onHit?.();
