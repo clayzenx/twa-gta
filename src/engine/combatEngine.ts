@@ -4,11 +4,14 @@ import { Character } from '@/types/game';
 /**
  * Обработчик попадания
  */
-export function handleHit() {
+export function handlePlayerHit() {
   const state = store.getState();
   const { player, enemies, updateEnemyHealth, removeEnemy } = state;
 
-  const enemy = enemies[0];
+  if (!player.targetId) return;
+
+  const enemy = enemies.find(e => e.id === player.targetId)
+
   if (!enemy?.id) return;
 
   const damage = calculateBaseDamage(player);
@@ -20,7 +23,6 @@ export function handleHit() {
     updateEnemyHealth(enemy.id, newHealth);
   }
 }
-
 
 /**
  * Простой расчёт урона на основе статов игрока

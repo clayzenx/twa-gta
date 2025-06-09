@@ -1,8 +1,7 @@
-import { useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { useGameStore, GameStore } from '@/store/gameStore'
 import { Enemy } from '@/types/game'
-import { isInRange } from '@/utils/math'
+import { useAutoTarget } from '@/hooks/game/useAutoTarget'
 
 export function useGameLogic() {
   const gameRunning = useGameStore((state: GameStore) => state.gameRunning)
@@ -11,17 +10,23 @@ export function useGameLogic() {
   const input = useGameStore((state: GameStore) => state.input)
 
   const updatePlayerPosition = useGameStore((state: GameStore) => state.updatePlayerPosition)
+  const setPlayerTarget = useGameStore((state: GameStore) => state.setPlayerTarget)
   const updatePlayerHealth = useGameStore((state: GameStore) => state.updatePlayerHealth)
   const setPlayerAttacking = useGameStore((state: GameStore) => state.setPlayerAttacking)
-  const resetPlayerAttack = useGameStore((state: GameStore) => state.resetPlayerAttack)
 
   const updateEnemyPosition = useGameStore((state: GameStore) => state.updateEnemyPosition)
   const updateEnemyHealth = useGameStore((state: GameStore) => state.updateEnemyHealth)
   const setEnemyAttacking = useGameStore((state: GameStore) => state.setEnemyAttacking)
   const removeEnemy = useGameStore((state: GameStore) => state.removeEnemy)
 
-  const resetPlayerAttackRef = useRef(resetPlayerAttack)
-  resetPlayerAttackRef.current = resetPlayerAttack
+  useAutoTarget({
+    selfPosition: player.position,
+    currentTargetId: player.targetId,
+    range: player.attackRange,
+    targets: enemies,
+    setTarget: setPlayerTarget,
+    onTargetChanged: setPlayerAttacking
+  }); // для player
 
   // Основной игровой цикл
   useFrame((state, delta) => {
@@ -34,21 +39,6 @@ export function useGameLogic() {
         z: player.position.z + input.movement.z * player.speed * delta
       }
       updatePlayerPosition(newPosition)
-    }
-
-    let enemyInRange = false;
-
-    // Проверка близости к врагам
-    enemies.forEach(enemy => {
-      if (isInRange(player.position, enemy.position, player.attackRange)) {
-        enemyInRange = true;
-      }
-    });
-
-    if (enemyInRange) {
-      setPlayerAttacking(true);
-    } else {
-      setPlayerAttacking(false);
     }
 
     // Обработка атаки игрока

@@ -5,6 +5,7 @@ export interface Position {
 
 export interface Character {
   position: Position
+  targetId: string | null
   health: number
   maxHealth: number
   attackRange: number

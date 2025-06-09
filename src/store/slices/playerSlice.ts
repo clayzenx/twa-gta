@@ -7,11 +7,13 @@ export interface PlayerSlice {
   // Player actions
   updatePlayerPosition: (position: Position) => void
   updatePlayerHealth: (health: number) => void
+  setPlayerTarget: (targetId: string | null) => void
   setPlayerAttacking: (isAttacking: boolean) => void
   resetPlayerAttack: () => void
 }
 
 const initialPlayerState: Character = {
+  targetId: null,
   position: { x: 0, z: 0 },
   health: 1000,
   maxHealth: 1000,
@@ -29,6 +31,16 @@ export const createPlayerSlice: StateCreator<
   PlayerSlice
 > = (set, get) => ({
   player: initialPlayerState,
+
+  setPlayerTarget: (targetId: string | null) =>
+    set(
+      (state) => ({
+        player: {
+          ...state.player,
+          targetId
+        }
+      })
+    ),
 
   updatePlayerPosition: (position: Position) =>
     set(

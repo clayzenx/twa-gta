@@ -2,8 +2,8 @@ import { useRef } from 'react'
 import { Group } from 'three'
 import { Text, useGLTF, useAnimations } from '@react-three/drei'
 import { Position } from '@/types/game'
-import { handleHit } from '@/engine/combatEngine'
-import { useAttackBehavior, useMovementBehavior } from '@/hooks/behavior/'
+import { handlePlayerHit } from '@/engine/combatEngine'
+import { useAttackBehavior, useMovementBehavior } from '@/hooks/behavior'
 
 interface PlayerProps {
   position: Position
@@ -34,7 +34,7 @@ export function Player({
     isAttacking,
     attackAction,
     hitTime: 0.4,
-    onHit: handleHit,
+    onHit: handlePlayerHit,
     onAttackComplete: () => console.log('Атака завершилась'),
   });
 

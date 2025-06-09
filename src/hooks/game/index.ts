@@ -1,0 +1,1 @@
+export { useAutoTarget } from './useAutoTarget';

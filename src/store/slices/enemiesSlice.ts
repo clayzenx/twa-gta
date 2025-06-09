@@ -22,7 +22,8 @@ const initialEnemies: Enemy[] = [
     speed: 3,
     isAttacking: false,
     lastAttackTime: 0,
-    baseDamage: 10
+    baseDamage: 10,
+    targetId: 'player1'
   },
   {
     id: 'enemy2',
@@ -33,7 +34,8 @@ const initialEnemies: Enemy[] = [
     speed: 2.5,
     isAttacking: false,
     lastAttackTime: 0,
-    baseDamage: 10
+    baseDamage: 10,
+    targetId: 'player1'
   }
 ]
 
