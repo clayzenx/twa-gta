@@ -49,18 +49,26 @@ export function useMovementBehavior({
   });
 
   useEffect(() => {
-    const actions = [runAction, combatMoveAction, idleAction];
-    actions.forEach((a) => a?.stop());
 
+    const actions = [runAction, combatMoveAction, idleAction];
+
+    // Определяем нужную анимацию
+    let activeAction: AnimationAction | null | undefined;
     if (isMoving) {
-      if (isAttacking) {
-        combatMoveAction?.reset().fadeIn(0.2).play();
-      } else {
-        runAction?.reset().fadeIn(0.2).play();
-      }
+      activeAction = isAttacking ? combatMoveAction : runAction;
     } else {
-      idleAction?.reset().fadeIn(0.2).play();
+      activeAction = idleAction;
     }
+
+    // Неактивные экшены останавливаем
+    actions.forEach((a) => {
+      if (a && a !== activeAction) {
+        a.fadeOut(0.2); // Мягко убираем
+      }
+    });
+
+    // Включаем нужную
+    activeAction?.reset().fadeIn(0.2).play();
   }, [isMoving, isAttacking, runAction, combatMoveAction, idleAction]);
 }
 
