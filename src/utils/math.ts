@@ -7,6 +7,9 @@ interface isInRangeResult {
 
 /**
  * Проверяет, находится ли target в радиусе range от origin.
+ * @origin - начальная позиция
+ * @target - целевая позиция
+ * @range - радиус проверки
  * Работает по плоскости XZ.
  */
 export function isInRange(origin: Position, target: Position, range: number): isInRangeResult {

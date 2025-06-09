@@ -1,4 +1,4 @@
-import { useGameStore, GameStore } from '../store/gameStore'
+import { useGameStore, GameStore } from '../../store/gameStore'
 
 export function useMobileInput() {
   const setPlayerMovement = useGameStore((state: GameStore) => state.setPlayerMovement)

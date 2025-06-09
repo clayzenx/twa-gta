@@ -7,8 +7,8 @@ import { GameUI } from './GameUI'
 import { GameControls } from './GameControls'
 import { MobileControls } from './MobileControls'
 import { useGameLogic } from '@/hooks/game/useGameLogic'
-import { useKeyboardInput } from '../../hooks/useKeyboardInput'
-import { useMobileInput } from '../../hooks/useMobileInput'
+import { useKeyboardInput } from '../../hooks/input/useKeyboardInput'
+import { useMobileInput } from '../../hooks/input/useMobileInput'
 import { useErrorBoundary } from 'use-error-boundary'
 
 // Основная игровая логика теперь в отдельном компоненте

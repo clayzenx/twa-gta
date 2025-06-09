@@ -1,5 +1,5 @@
 import "./App.css";
-import { AppHeader } from "@/components/AppHeader";
+import { AppHeader } from "@/components/ui/AppHeader";
 import { GameCanvas } from "@/components/game/GameCanvas";
 import { Loader } from "@react-three/drei"
 import { FlexBoxCol, StyledApp, AppContainer } from "@/components/styled/styled";

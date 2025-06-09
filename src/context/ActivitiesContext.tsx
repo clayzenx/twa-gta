@@ -1,5 +1,5 @@
 import { createContext, useMemo, ReactNode } from 'react';
-import { useActivities } from '@/hooks/useActivities';
+import { useActivities } from '@/hooks/providers/useActivities';
 import { Activity } from '@/api/activities';
 import { ActivityIds } from "@/types/activities";
 

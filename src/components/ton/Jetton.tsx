@@ -1,6 +1,5 @@
-import { beginCell, toNano, Address, Cell, fromNano } from "ton";
-import { useTonConnect } from "../hooks/useTonConnect";
-import { useFaucetJettonContract } from "../hooks/useFaucetJettonContract";
+import { useTonConnect } from "../hooks/ton/useTonConnect";
+import { useFaucetJettonContract } from "../hooks/ton/useFaucetJettonContract";
 import {
   Card,
   FlexBoxCol,

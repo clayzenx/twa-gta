@@ -1,6 +1,6 @@
 import { TonConnectButton } from "@tonconnect/ui-react";
-import { useCounterContract } from "../hooks/useCounterContract";
-import { useTonConnect } from "../hooks/useTonConnect";
+import { useCounterContract } from "../hooks/ton/useCounterContract";
+import { useTonConnect } from "../hooks/ton/useTonConnect";
 
 import {
   Card,

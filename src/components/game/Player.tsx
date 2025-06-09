@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { Group } from 'three'
 import { Text, useGLTF, useAnimations } from '@react-three/drei'
 import { Position } from '@/types/game'
-import { handlePlayerHit } from '@/engine/combatEngine'
+import { handlePlayerHit } from '@/engine/playerCombatEngine'
 import { useAttackBehavior, useMovementBehavior } from '@/hooks/behavior'
 
 interface PlayerProps {

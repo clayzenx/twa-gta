@@ -15,7 +15,6 @@ interface TelegramWebApp {
     show(): void
     hide(): void
   }
-  // можно дополнить при необходимости
 }
 
 interface Window {

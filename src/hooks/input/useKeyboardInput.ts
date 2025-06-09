@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { useGameStore, GameStore } from '../store/gameStore'
+import { useGameStore, GameStore } from '../../store/gameStore'
 
 export function useKeyboardInput() {
   const keysPressed = useRef<Set<string>>(new Set())

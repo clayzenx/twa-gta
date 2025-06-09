@@ -1,5 +1,5 @@
 import { createContext, useContext, ReactNode } from "react";
-import { useInitApp } from '@/hooks/useInitApp';
+import { useInitApp } from '@/hooks/app/useInitApp';
 
 export type User = {
   id: number

@@ -14,7 +14,7 @@ export function handlePlayerHit() {
 
   if (!enemy?.id) return;
 
-  const damage = calculateBaseDamage(player);
+  const damage = calculateBasePlayerDamage(player);
   const newHealth = enemy.health - damage;
 
   if (newHealth <= 0) {
@@ -27,7 +27,7 @@ export function handlePlayerHit() {
 /**
  * Простой расчёт урона на основе статов игрока
  */
-export function calculateBaseDamage(player: Character): number {
+export function calculateBasePlayerDamage(player: Character): number {
   return player.baseDamage;
 }
 
