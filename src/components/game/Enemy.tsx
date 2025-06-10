@@ -1,8 +1,11 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, useEffect, useMemo } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { Group } from 'three'
-import { Text } from '@react-three/drei'
+import { Text, useAnimations, useGLTF } from '@react-three/drei'
 import { Character, Position } from '../../types/game'
+import { SkeletonUtils } from 'three-stdlib';
+import { useAttackBehavior, useMovementBehavior } from '@/hooks/behavior'
+import { useEnemyAI } from '@/hooks/behavior/useEnemyAI'
 
 interface EnemyProps {
   enemy: Character & { id: string }
@@ -11,60 +14,40 @@ interface EnemyProps {
 }
 
 export function Enemy({ enemy, playerPosition, onAttack }: EnemyProps) {
-  const groupRef = useRef<Group>(null)
   const [targetPosition, setTargetPosition] = useState<Position>(enemy.position)
 
-  // AI логика следования и атаки
-  useFrame((state, delta) => {
-    if (!groupRef.current) return
+  const enemyRef = useRef<Group>(null)
+  const { scene, animations } = useGLTF('models/monster.glb')
 
-    const distance = Math.sqrt(
-      Math.pow(playerPosition.x - enemy.position.x, 2) +
-      Math.pow(playerPosition.z - enemy.position.z, 2)
-    )
+  const enemyObj = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  const { actions } = useAnimations(animations, enemyRef)
 
-    // Если игрок в зоне атаки
-    if (distance <= enemy.attackRange) {
-      const now = Date.now()
-      if (now - enemy.lastAttackTime > 1000 && !enemy.isAttacking) { // 1 секунда cooldown
-        onAttack(enemy.id)
-      }
-    } else if (distance > enemy.attackRange) {
-      // Движение к игроку
-      const direction = {
-        x: playerPosition.x - enemy.position.x,
-        z: playerPosition.z - enemy.position.z
-      }
-      const length = Math.sqrt(direction.x * direction.x + direction.z * direction.z)
+  const attackAction = actions['Attack'];
+  const runAction = actions['Run'];
 
-      if (length > 0.1) {
-        const normalizedDirection = {
-          x: direction.x / length,
-          z: direction.z / length
-        }
+  useMovementBehavior({
+    isMoving: true,
+    isAttacking: enemy.isAttacking,
+    runAction,
+    selfRef: enemyRef,
+    targetPosition: playerPosition,
+  });
 
-        setTargetPosition({
-          x: enemy.position.x + normalizedDirection.x * enemy.speed * delta,
-          z: enemy.position.z + normalizedDirection.z * enemy.speed * delta
-        })
-      }
-    }
+  useAttackBehavior({
+    isAttacking: enemy.isAttacking,
+    attackAction,
+    hitTime: 0.4,
+    onHit: () => { },
+    onAttackComplete: () => console.log("Атака завершилась"),
+    selfRef: enemyRef,
+    targetPosition: playerPosition,
+  });
 
-    // Поворот к игроку
-    const angle = Math.atan2(
-      playerPosition.x - enemy.position.x,
-      playerPosition.z - enemy.position.z
-    )
-    groupRef.current.rotation.y = angle
-
-    // Анимация движения/атаки
-    if (enemy.isAttacking) {
-      const time = state.clock.elapsedTime
-      groupRef.current.position.y = 0.5 + Math.sin(time * 15) * 0.2
-    } else {
-      const time = state.clock.elapsedTime
-      groupRef.current.position.y = 0.5 + Math.sin(time * 4) * 0.08
-    }
+  useEnemyAI({
+    enemy,
+    playerPosition,
+    selfRef: enemyRef,
+    onAttack
   })
 
   // Обновляем позицию врага
@@ -74,39 +57,7 @@ export function Enemy({ enemy, playerPosition, onAttack }: EnemyProps) {
 
   return (
     <group>
-      <group ref={groupRef} position={[enemy.position.x, 0.5, enemy.position.z]}>
-        {/* Простая модель врага (заготовка для замены) */}
-        <mesh castShadow>
-          <boxGeometry args={[0.5, 1, 0.3]} />
-          <meshStandardMaterial color="#dc2626" />
-        </mesh>
-
-        {/* Голова */}
-        <mesh castShadow position={[0, 0.7, 0]}>
-          <sphereGeometry args={[0.25]} />
-          <meshStandardMaterial color="#7f1d1d" />
-        </mesh>
-
-        {/* Руки */}
-        <mesh castShadow position={[-0.4, 0.2, 0]}>
-          <boxGeometry args={[0.15, 0.6, 0.15]} />
-          <meshStandardMaterial color="#7f1d1d" />
-        </mesh>
-        <mesh castShadow position={[0.4, 0.2, 0]}>
-          <boxGeometry args={[0.15, 0.6, 0.15]} />
-          <meshStandardMaterial color="#7f1d1d" />
-        </mesh>
-
-        {/* Ноги */}
-        <mesh castShadow position={[-0.12, -0.8, 0]}>
-          <boxGeometry args={[0.15, 0.4, 0.15]} />
-          <meshStandardMaterial color="#1f2937" />
-        </mesh>
-        <mesh castShadow position={[0.12, -0.8, 0]}>
-          <boxGeometry args={[0.15, 0.4, 0.15]} />
-          <meshStandardMaterial color="#1f2937" />
-        </mesh>
-      </group>
+      <primitive ref={enemyRef} object={enemyObj} position={[enemy.position.x, 0.5, enemy.position.z]} />
 
       {/* HP бар врага */}
       <Text
