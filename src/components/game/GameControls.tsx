@@ -11,7 +11,6 @@ export function GameControls() {
       borderRadius: '5px'
     }}>
       <div>WASD/ЦФЫВ - движение</div>
-      <div>Пробел - атака</div>
     </div>
   )
 }

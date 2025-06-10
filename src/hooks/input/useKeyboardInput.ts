@@ -6,7 +6,6 @@ export function useKeyboardInput() {
 
   const setPlayerMovement = useGameStore((state: GameStore) => state.setPlayerMovement)
   const stopPlayerMovement = useGameStore((state: GameStore) => state.stopPlayerMovement)
-  const triggerPlayerAttack = useGameStore((state: GameStore) => state.triggerPlayerAttack)
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -16,11 +15,6 @@ export function useKeyboardInput() {
       // Обработка движения
       updateMovement()
 
-      // Обработка атаки
-      if (key === ' ') {
-        event.preventDefault()
-        triggerPlayerAttack()
-      }
     }
 
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -73,7 +67,7 @@ export function useKeyboardInput() {
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
     }
-  }, [setPlayerMovement, stopPlayerMovement, triggerPlayerAttack])
+  }, [setPlayerMovement, stopPlayerMovement])
 
   // Возвращаем текущие нажатые клавиши для отладки
   return {
