@@ -2,6 +2,7 @@ import { useGameStore } from '@/store/gameStore';
 import { useEffect } from 'react';
 import { AnimationAction, Object3D } from 'three';
 import { useLookAtTarget } from './useLookAtTarget';
+import { useMovementDirectionTracker } from '@/hooks/behavior/useMovementDirectionTracker'
 
 /**
  * Хук, управляющий анимациями движения и покоя, с поддержкой боевого режима и поворота к цели.
@@ -47,6 +48,12 @@ export function useMovementBehavior({
     smooth: true,
     fallbackMovement: movement,
   });
+
+  useMovementDirectionTracker({
+    isMoving,
+    movementVec: movement,
+    selfRef
+  })
 
   useEffect(() => {
 

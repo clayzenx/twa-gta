@@ -34,9 +34,10 @@ export function useGameLogic() {
 
     // Обработка движения игрока
     if (input.isMoving) {
+      const speed = player.isAttacking ? player.speed / 1.4 : player.speed
       const newPosition = {
-        x: player.position.x + input.movement.x * player.speed * delta,
-        z: player.position.z + input.movement.z * player.speed * delta
+        x: player.position.x + input.movement.x * speed * delta,
+        z: player.position.z + input.movement.z * speed * delta
       }
       updatePlayerPosition(newPosition)
     }
