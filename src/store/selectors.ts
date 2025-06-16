@@ -5,6 +5,8 @@ export const selectPlayer = (state: GameStore) => state.player
 export const selectEnemies = (state: GameStore) => state.enemies
 export const selectInput = (state: GameStore) => state.input
 export const selectGameRunning = (state: GameStore) => state.gameRunning
+export const selectStartGame = (state: GameStore) => state.startGame
+export const selectStopGame = (state: GameStore) => state.stopGame
 
 // Составные селекторы для избежания лишних ререндеров
 export const selectPlayerPosition = (state: GameStore) => state.player.position

@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand'
 
 export interface GameSlice {
   gameRunning: boolean
-  
+
   // Game control actions
   setGameRunning: (running: boolean) => void
   startGame: () => void
@@ -16,7 +16,7 @@ export const createGameSlice: StateCreator<
   [],
   GameSlice
 > = (set, get) => ({
-  gameRunning: true,
+  gameRunning: false,
 
   setGameRunning: (running: boolean) =>
     set(

@@ -6,8 +6,12 @@ import { FlexBoxCol, StyledApp, AppContainer } from "@/components/styled/styled"
 import "@twa-dev/sdk";
 import { UserProvider } from '@/context/UserContext';
 import { ActivitiesProvider } from '@/context/ActivitiesContext';
+import { useGameStore } from "./store/gameStore";
+import { selectGameRunning } from "./store/selectors";
 
 function App() {
+  const gameRunning = useGameStore(selectGameRunning)
+
   return (
     <UserProvider>
       <ActivitiesProvider>
@@ -16,7 +20,7 @@ function App() {
           <AppContainer>
             <FlexBoxCol>
               <AppHeader />
-              <GameCanvas />
+              {gameRunning && <GameCanvas />}
             </FlexBoxCol>
           </AppContainer>
         </StyledApp>

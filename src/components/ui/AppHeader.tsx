@@ -5,16 +5,25 @@ import { CHAIN } from "@tonconnect/protocol";
 
 import { useTonConnect } from "@/hooks/ton/useTonConnect";
 import { useUser } from "@/context/UserContext"
+import { useGameStore } from "@/store/gameStore";
+import { selectStartGame, selectStopGame, selectGameRunning } from "@/store/selectors";
 
 export function AppHeader() {
   const { network } = useTonConnect();
   const { user } = useUser()
+
+  const gameRunning = useGameStore(selectGameRunning)
+  const startGame = useGameStore(selectStartGame)
+  const stopGame = useGameStore(selectStopGame)
 
   return (
     <FlexBoxRow>
       <Avatar firstName={user?.firstName} photoUrl={user?.photoUrl} />
       <span className="ml-3 mr-3">{user?.username}</span>
       <span>{user?.balance}</span>
+      <Button onClick={gameRunning ? stopGame : startGame}>
+        {gameRunning ? 'stopGame' : 'startGame'}
+      </Button>
       <TonConnectButton />
       <Button>
         {network
