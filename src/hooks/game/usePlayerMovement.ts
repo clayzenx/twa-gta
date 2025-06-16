@@ -1,10 +1,11 @@
 import { useGameStore } from "@/store/gameStore";
+import { selectInput, selectPlayer, selectUpdatePlayerPosition } from "@/store/selectors";
 import { useFrame } from "@react-three/fiber";
 
 export function usePlayerMovement() {
-  const input = useGameStore((s) => s.input);
-  const player = useGameStore((s) => s.player);
-  const updatePlayerPosition = useGameStore((s) => s.updatePlayerPosition);
+  const input = useGameStore(selectInput);
+  const player = useGameStore(selectPlayer);
+  const updatePlayerPosition = useGameStore(selectUpdatePlayerPosition);
 
   useFrame((_, delta) => {
     if (!input.isMoving) return;

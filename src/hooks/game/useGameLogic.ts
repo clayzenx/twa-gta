@@ -1,18 +1,19 @@
 import { useFrame } from '@react-three/fiber'
-import { useGameStore, GameStore } from '@/store/gameStore'
+import { useGameStore } from '@/store/gameStore'
+import { selectPlayer, selectEnemies, selectInput, selectGameRunning, selectSetPlayerTarget, selectSetPlayerAttacking } from '@/store/selectors'
 import { useAutoTarget } from '@/hooks/game/useAutoTarget'
 import { usePlayerMovement } from '@/hooks/game/usePlayerMovement'
 import { usePlayerAttack } from '@/hooks/game/usePlayerAttack'
 import { useEnemyAI } from '@/hooks/game/useEnemyAI'
 
 export function useGameLogic() {
-  const gameRunning = useGameStore((state: GameStore) => state.gameRunning)
-  const player = useGameStore((state: GameStore) => state.player)
-  const enemies = useGameStore((state: GameStore) => state.enemies)
-  const input = useGameStore((state: GameStore) => state.input)
+  const gameRunning = useGameStore(selectGameRunning)
+  const player = useGameStore(selectPlayer)
+  const enemies = useGameStore(selectEnemies)
+  const input = useGameStore(selectInput)
 
-  const setPlayerTarget = useGameStore((state: GameStore) => state.setPlayerTarget)
-  const setPlayerAttacking = useGameStore((state: GameStore) => state.setPlayerAttacking)
+  const setPlayerTarget = useGameStore(selectSetPlayerTarget)
+  const setPlayerAttacking = useGameStore(selectSetPlayerAttacking)
 
   usePlayerMovement()
   usePlayerAttack()

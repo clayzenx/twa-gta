@@ -1,5 +1,7 @@
 import { StateCreator } from 'zustand'
 import { Character, Position } from '@/types/game'
+import { GAME_CONSTANTS } from '@/constants/game'
+import { sanitizeHealth, sanitizePosition } from '@/utils/validation'
 
 export interface PlayerSlice {
   player: Character
@@ -15,11 +17,11 @@ export interface PlayerSlice {
 const initialPlayerState: Character = {
   targetId: null,
   position: { x: 0, z: 0 },
-  health: 1000,
-  maxHealth: 1000,
-  attackRange: 2,
-  speed: 5,
-  baseDamage: 10,
+  health: GAME_CONSTANTS.PLAYER.INITIAL_HEALTH,
+  maxHealth: GAME_CONSTANTS.PLAYER.MAX_HEALTH,
+  attackRange: GAME_CONSTANTS.PLAYER.ATTACK_RANGE,
+  speed: GAME_CONSTANTS.PLAYER.SPEED,
+  baseDamage: GAME_CONSTANTS.PLAYER.BASE_DAMAGE,
   isAttacking: false,
   lastAttackTime: 0
 }
@@ -47,7 +49,7 @@ export const createPlayerSlice: StateCreator<
       (state) => ({
         player: {
           ...state.player,
-          position
+          position: sanitizePosition(position)
         }
       })
     ),
@@ -57,7 +59,7 @@ export const createPlayerSlice: StateCreator<
       (state) => ({
         player: {
           ...state.player,
-          health: Math.max(0, Math.min(health, state.player.maxHealth))
+          health: sanitizeHealth(health, state.player.maxHealth)
         }
       })
     ),

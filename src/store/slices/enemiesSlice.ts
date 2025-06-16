@@ -1,5 +1,7 @@
 import { StateCreator } from 'zustand'
 import { Enemy, Position } from '@/types/game'
+import { GAME_CONSTANTS } from '@/constants/game'
+import { sanitizeHealth, sanitizePosition } from '@/utils/validation'
 
 export interface EnemiesSlice {
   enemies: Enemy[]
@@ -16,25 +18,25 @@ const initialEnemies: Enemy[] = [
   {
     id: 'enemy1',
     position: { x: 5, z: 5 },
-    health: 50,
-    maxHealth: 50,
-    attackRange: 1.5,
-    speed: 3,
+    health: GAME_CONSTANTS.ENEMY.INITIAL_HEALTH,
+    maxHealth: GAME_CONSTANTS.ENEMY.MAX_HEALTH,
+    attackRange: GAME_CONSTANTS.ENEMY.ATTACK_RANGE,
+    speed: GAME_CONSTANTS.ENEMY.SPEED,
     isAttacking: false,
     lastAttackTime: 0,
-    baseDamage: 10,
+    baseDamage: GAME_CONSTANTS.ENEMY.BASE_DAMAGE,
     targetId: 'player1'
   },
   {
     id: 'enemy2',
     position: { x: -7, z: 3 },
-    health: 50,
-    maxHealth: 50,
-    attackRange: 1.5,
-    speed: 2.5,
+    health: GAME_CONSTANTS.ENEMY.INITIAL_HEALTH,
+    maxHealth: GAME_CONSTANTS.ENEMY.MAX_HEALTH,
+    attackRange: GAME_CONSTANTS.ENEMY.ATTACK_RANGE,
+    speed: GAME_CONSTANTS.ENEMY.SPEED,
     isAttacking: false,
     lastAttackTime: 0,
-    baseDamage: 10,
+    baseDamage: GAME_CONSTANTS.ENEMY.BASE_DAMAGE,
     targetId: 'player1'
   }
 ]
@@ -52,7 +54,7 @@ export const createEnemiesSlice: StateCreator<
       (state) => ({
         enemies: state.enemies.map(enemy =>
           enemy.id === enemyId
-            ? { ...enemy, position }
+            ? { ...enemy, position: sanitizePosition(position) }
             : enemy
         )
       })
@@ -63,7 +65,7 @@ export const createEnemiesSlice: StateCreator<
       (state) => ({
         enemies: state.enemies.map(enemy =>
           enemy.id === enemyId
-            ? { ...enemy, health: Math.max(0, Math.min(health, enemy.maxHealth)) }
+            ? { ...enemy, health: sanitizeHealth(health, enemy.maxHealth) }
             : enemy
         )
       })

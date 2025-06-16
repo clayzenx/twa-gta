@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useCallback } from 'react'
 import { Group } from 'three'
 import { Text, useGLTF, useAnimations } from '@react-three/drei'
 import { Position } from '@/types/game'
@@ -6,6 +6,7 @@ import { handlePlayerHit } from '@/engine/playerCombatEngine'
 import { useAttackBehavior, useMovementBehavior } from '@/hooks/behavior'
 import { useEnableShadows } from '@/hooks/game/useEnableShadows'
 import { useGameStore } from '@/store/gameStore'
+import { selectEnemies, selectPlayerTarget } from '@/store/selectors'
 
 interface PlayerProps {
   position: Position
@@ -24,16 +25,22 @@ export function Player({
   maxHealth,
   rotation
 }: PlayerProps) {
-  const enemies = useGameStore((state) => state.enemies);
-  const targetId = useGameStore((state) => state.player.targetId);
+  const enemies = useGameStore(selectEnemies);
+  const targetId = useGameStore(selectPlayerTarget);
 
   const playerRef = useRef<Group>(null)
   const { scene, animations } = useGLTF('models/player.glb')
   const { actions } = useAnimations(animations, playerRef)
 
+  // Мемоизация target enemy для избежания лишних пересчетов
   const targetEnemy = useMemo(() => {
     return enemies.find((enemy) => enemy.id === targetId);
   }, [enemies, targetId]);
+
+  // Мемоизация callback для атаки
+  const onAttackComplete = useCallback(() => {
+    console.log("Атака завершилась");
+  }, []);
 
   const attackAction = actions['Attack'];
   const runAction = actions['Run'];
@@ -45,7 +52,7 @@ export function Player({
     attackAction,
     hitTime: 0.4,
     onHit: handlePlayerHit,
-    onAttackComplete: () => console.log("Атака завершилась"),
+    onAttackComplete,
     selfRef: playerRef,
     targetPosition: targetEnemy?.position,
   });

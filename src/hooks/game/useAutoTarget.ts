@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { isInRange } from "@/utils/math";
 import { Position } from "@/types/game";
 
@@ -29,6 +29,12 @@ export function useAutoTarget<T extends { id: string; position: Position }>({
   setTarget,
   onTargetChanged
 }: UseAutoTargetProps<T>) {
+  // Оптимизированная мемоизация ключа целей для избежания ненужных ререндеров
+  const targetsKey = useMemo(() => 
+    targets.map((t) => `${t.id}:${t.position.x},${t.position.z}`).join("|"),
+    [targets]
+  );
+
   useEffect(() => {
     if (!targets.length) {
       if (currentTargetId !== null) {
@@ -89,7 +95,7 @@ export function useAutoTarget<T extends { id: string; position: Position }>({
     selfPosition.z,
     currentTargetId,
     range,
-    targets.map((t) => `${t.id}:${t.position.x},${t.position.z}`).join("|"),
+    targetsKey
   ]);
 }
 

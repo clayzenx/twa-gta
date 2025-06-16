@@ -1,11 +1,10 @@
-import { useRef, useState, useEffect, useMemo } from 'react'
-import { useFrame } from '@react-three/fiber'
+import { useRef, useMemo, useCallback, useEffect } from 'react'
 import { Group } from 'three'
 import { Text, useAnimations, useGLTF } from '@react-three/drei'
 import { Character, Position } from '../../types/game'
-import { SkeletonUtils } from 'three-stdlib';
 import { useAttackBehavior, useMovementBehavior } from '@/hooks/behavior'
 import { useEnemyAI } from '@/hooks/behavior/useEnemyAI'
+import { modelCache } from '@/utils/modelCache'
 
 interface EnemyProps {
   enemy: Character & { id: string }
@@ -14,13 +13,17 @@ interface EnemyProps {
 }
 
 export function Enemy({ enemy, playerPosition, onAttack }: EnemyProps) {
-  const [targetPosition, setTargetPosition] = useState<Position>(enemy.position)
-
   const enemyRef = useRef<Group>(null)
   const { scene, animations } = useGLTF('models/monster.glb')
 
-  const enemyObj = useMemo(() => SkeletonUtils.clone(scene), [scene]);
+  // Получение клона из кэша для оптимизации
+  const enemyObj = useMemo(() => modelCache.getClone(scene, 'monster'), [scene]);
   const { actions } = useAnimations(animations, enemyRef)
+
+  // Мемоизация callback для предотвращения ненужных ререндеров
+  const handleAttack = useCallback((enemyId: string) => {
+    onAttack(enemyId);
+  }, [onAttack]);
 
   const attackAction = actions['Attack'];
   const runAction = actions['Run'];
@@ -47,13 +50,17 @@ export function Enemy({ enemy, playerPosition, onAttack }: EnemyProps) {
     enemy,
     playerPosition,
     selfRef: enemyRef,
-    onAttack
+    onAttack: handleAttack
   })
 
-  // Обновляем позицию врага
+  // Возврат клона в кэш при размонтировании компонента
   useEffect(() => {
-    enemy.position = targetPosition
-  }, [targetPosition, enemy])
+    return () => {
+      if (enemyObj) {
+        modelCache.returnClone(enemyObj, 'monster');
+      }
+    };
+  }, [enemyObj]);
 
   return (
     <group>
