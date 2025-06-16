@@ -10,6 +10,7 @@ import { useGameLogic } from '@/hooks/game/useGameLogic'
 import { useKeyboardInput } from '../../hooks/input/useKeyboardInput'
 import { useMobileInput } from '../../hooks/input/useMobileInput'
 import { useErrorBoundary } from 'use-error-boundary'
+import { Environment } from '@react-three/drei'
 
 // Основная игровая логика теперь в отдельном компоненте
 function GameLogic() {
@@ -61,27 +62,22 @@ export function GameCanvas() {
     <div style={{ position: 'relative', width: '100%', height: '500px' }}>
       <Canvas
         shadows
-        camera={{
-          position: [8, 12, 8],
-          fov: 40,
-          near: 0.1,
-          far: 1000
-        }}
-        style={{ width: '100%', height: '100%' }}
+        camera={{ position: [8, 12, 8], fov: 40 }}
       >
-        <ambientLight intensity={0.7} />
         <directionalLight
           position={[10, 10, 5]}
-          intensity={1}
+          intensity={0.5}
           castShadow
-          shadow-mapSize-width={2048}
-          shadow-mapSize-height={2048}
-          shadow-camera-far={50}
-          shadow-camera-left={-20}
-          shadow-camera-right={20}
-          shadow-camera-top={20}
-          shadow-camera-bottom={-20}
+          shadow-mapSize-width={4096}
+          shadow-mapSize-height={4096}
+          shadow-camera-far={80}
+          shadow-camera-left={-30}
+          shadow-camera-right={30}
+          shadow-camera-top={25}
+          shadow-camera-bottom={-25}
+          shadow-bias={-0.0001}
         />
+        <Environment preset='sunset' />
         <GameLogic />
       </Canvas>
 
