@@ -2,8 +2,8 @@
 export const GAME_CONSTANTS = {
   // Параметры игрока
   PLAYER: {
-    MAX_HEALTH: 1000,
-    INITIAL_HEALTH: 1000,
+    MAX_HEALTH: 100,
+    INITIAL_HEALTH: 100,
     ATTACK_RANGE: 2,
     SPEED: 5,
     BASE_DAMAGE: 10,
