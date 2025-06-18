@@ -6,7 +6,7 @@ import { useGameStore } from '@/store/gameStore'
 const TAG = '[useInitApp]'
 
 export function useInitApp() {
-  const { user, isLoading, setUser, setLoading, initializePlayerData, initializeFromPlayerData } = useGameStore()
+  const { user, isLoading, setUser, setLoading } = useGameStore()
 
   useEffect(() => {
     const run = async () => {
@@ -31,7 +31,7 @@ export function useInitApp() {
       }
     }
     run()
-  }, [setUser, setLoading, initializePlayerData, initializeFromPlayerData])
+  }, [setUser, setLoading])
 
   return { user, ready: !isLoading }
 }

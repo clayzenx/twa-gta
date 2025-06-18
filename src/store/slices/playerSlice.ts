@@ -2,7 +2,7 @@ import { StateCreator } from 'zustand'
 import { Character, Position } from '@/types/game'
 import { GAME_CONSTANTS } from '@/constants/game'
 import { sanitizeHealth, sanitizePosition } from '@/utils/validation'
-import { PlayerData } from './userSlice'
+import { GameState, PlayerData } from './userSlice'
 
 export interface PlayerSlice {
   player: Character
@@ -13,6 +13,7 @@ export interface PlayerSlice {
   setPlayerTarget: (targetId: string | null) => void
   setPlayerAttacking: (isAttacking: boolean) => void
   resetPlayerAttack: () => void
+  // TODO: лишний походу. Как и весь модуль
   initializeFromPlayerData: (playerData: PlayerData) => void
 }
 

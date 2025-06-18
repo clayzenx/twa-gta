@@ -12,11 +12,14 @@ import { useMobileInput } from '../../hooks/input/useMobileInput'
 import { useErrorBoundary } from 'use-error-boundary'
 import { Environment } from '@react-three/drei'
 
+const TAG = '[GameCanvas]'
+
 // Основная игровая логика
 function GameLogic() {
   const { player, playerGameState, enemies, playerRotation, isMoving } = useGameLogic()
 
-  if (!player) throw new Error('Player does not exist')
+  if (!player) throw new Error(`${TAG}: player does not exist`)
+  if (!playerGameState) throw new Error(`${TAG}: player hame state does not exist`)
 
   return (
     <>

@@ -19,6 +19,7 @@ export const selectMovement = (state: GameStore) => state.input.movement
 export const selectIsMoving = (state: GameStore) => state.input.isMoving
 
 // Селекторы действий - отдельные функции для избежания создания новых объектов
+export const selectInitializePvEGameState = (state: GameStore) => state.initializePvEGameState
 export const selectUpdatePlayerPosition = (state: GameStore) => state.updatePlayerPosition
 export const selectUpdatePlayerHealth = (state: GameStore) => state.updatePlayerHealth
 export const selectSetPlayerTarget = (state: GameStore) => state.setPlayerTarget

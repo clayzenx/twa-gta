@@ -37,6 +37,7 @@ export type PlayerData = {
   updatedAt: string
 }
 
+// TODO: Надо убрать лишнее
 export interface UserSlice {
   user: User | null
   isLoading: boolean
@@ -49,6 +50,7 @@ export interface UserSlice {
   // Player actions  
   updatePlayerData: (stats: Partial<PlayerData>) => void
   initializePlayerData: (player: PlayerData) => void
+  initializePvEGameState: () => void
 
   // Selectors
   getPlayerCharacter: () => Character | null
@@ -64,6 +66,18 @@ export const createUserSlice: StateCreator<
   isLoading: false,
 
   setUser: (user) => set({ user }),
+
+  initializePvEGameState: () =>
+    set((state) => ({
+      user: state.user && {
+        ...state.user,
+        gameState: {
+          targetId: null,
+          position: { x: 0, z: 0 },
+          isAttacking: false
+        },
+      }
+    })),
 
   setLoading: (loading) => set({ isLoading: loading }),
 
