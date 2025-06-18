@@ -32,7 +32,7 @@ export function setupAuthInterceptor(api: AxiosInstance) {
         const initData = WebApp.initData;
         if (initData) {
           originalRequest.headers = originalRequest.headers || {};
-          (originalRequest.headers as any)["x-telegram-initdata"] = initData;
+          (originalRequest.headers as any)["X-Telegram-InitData"] = initData;
           return api(originalRequest);
         }
       }

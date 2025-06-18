@@ -14,7 +14,7 @@ export async function initializePlayer(): Promise<PlayerData> {
 
   console.log('initializePlayer', initData, headers)
 
-  const response = await api.post<PlayerData>('/player/initialize', {
+  const response = await api.post<PlayerData>('/player/initialize', null, {
     headers,
   });
   console.info(`${TAG}: initialize player`, response.data);
