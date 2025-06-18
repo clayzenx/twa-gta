@@ -23,15 +23,18 @@ export function useInitApp() {
           // TODO: лишнее наверное
           // initializePlayerData(playerData)
 
+          console.log('initializePlayer', playerData)
           // Update the user object with player data
           setUser({ ...userData, player: playerData })
 
           // TODO: лишний state с player. user.player хватит вероятно
           // Initialize game player from player data
-          initializeFromPlayerData(playerData)
+          // initializeFromPlayerData(playerData)
         } else {
+          console.log('else', userData.player)
+          setUser({ ...userData, player: userData.player })
           // Initialize game player from existing data
-          initializeFromPlayerData(userData.player)
+          // initializeFromPlayerData(userData.player)
         }
       } catch (err) {
         console.error(`${TAG}: App init error:`, err)
