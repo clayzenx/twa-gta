@@ -1,4 +1,5 @@
 import { useFrame } from '@react-three/fiber'
+import { useMemo } from 'react'
 import { useGameStore } from '@/store/gameStore'
 import { selectPlayer, selectEnemies, selectInput, selectGameRunning, selectSetPlayerTarget, selectSetPlayerAttacking, selectPlayerGameState } from '@/store/selectors'
 import { useAutoTarget } from '@/hooks/game/useAutoTarget'
@@ -22,16 +23,18 @@ export function useGameLogic() {
   const setPlayerTarget = useGameStore(selectSetPlayerTarget)
   const setPlayerAttacking = useGameStore(selectSetPlayerAttacking)
 
-  console.log('usePlayerMovement()')
+  // Мемоизируем позицию для избежания лишних объектов
+  const memoizedPosition = useMemo(() => ({
+    x: playerGameState.position.x,
+    z: playerGameState.position.z
+  }), [playerGameState.position.x, playerGameState.position.z])
+
   usePlayerMovement()
-  console.log('usePlayerAttack()')
   usePlayerAttack()
-  console.log('useEnemyAI()')
   useEnemyAI()
 
-  console.log('useAutoTarget()')
   useAutoTarget({
-    selfPosition: playerGameState.position,
+    selfPosition: memoizedPosition,
     currentTargetId: playerGameState.targetId,
     range: player.attackRange,
     targets: enemies,

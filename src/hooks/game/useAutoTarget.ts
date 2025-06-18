@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback, useRef } from "react";
 import { isInRange } from "@/utils/math";
 import { Position } from "@/types/game";
 
@@ -29,6 +29,10 @@ export function useAutoTarget<T extends { id: string; position: Position }>({
   setTarget,
   onTargetChanged
 }: UseAutoTargetProps<T>) {
+  // Используем ref для позиции, чтобы избежать бесконечных re-render'ов
+  const positionRef = useRef(selfPosition);
+  positionRef.current = selfPosition;
+
   // Оптимизированная мемоизация ключа целей для избежания ненужных ререндеров
   const targetsKey = useMemo(() =>
     targets.map((t) => `${t.id}:${t.position.x},${t.position.z}`).join("|"),
@@ -50,7 +54,7 @@ export function useAutoTarget<T extends { id: string; position: Position }>({
       const stillValid = targets.some(
         (t) =>
           t.id === currentTargetId &&
-          isInRange(selfPosition, t.position, range).inRange
+          isInRange(positionRef.current, t.position, range).inRange
       );
 
       if (!stillValid) {
@@ -66,7 +70,7 @@ export function useAutoTarget<T extends { id: string; position: Position }>({
     let foundInRange = false;
 
     for (const target of targets) {
-      const { distance, inRange } = isInRange(selfPosition, target.position, range);
+      const { distance, inRange } = isInRange(positionRef.current, target.position, range);
 
       if (distance < closestDistance) {
         closestDistance = distance;
@@ -91,8 +95,6 @@ export function useAutoTarget<T extends { id: string; position: Position }>({
       onTargetChanged?.(true);
     }
   }, [
-    selfPosition.x,
-    selfPosition.z,
     currentTargetId,
     range,
     targetsKey

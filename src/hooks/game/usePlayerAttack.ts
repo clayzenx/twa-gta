@@ -41,7 +41,7 @@ export function usePlayerAttack() {
       }
     });
 
-    if (hasAttacked || true) {
+    if (hasAttacked) {
       setPlayerAttacking(true);
     }
   });
