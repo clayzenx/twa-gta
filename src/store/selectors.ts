@@ -1,4 +1,5 @@
 import { GameStore } from './gameStore'
+import { GameState } from './slices/userSlice'
 
 // Селекторы для оптимизации производительности
 export const selectPlayer = (state: GameStore) => state.user?.player
@@ -40,3 +41,9 @@ export const selectEnemyActions = (state: GameStore) => ({
   removeEnemy: state.removeEnemy,
   addEnemy: state.addEnemy
 })
+
+
+// Селектроы enemy
+export const selectUpdateEnemyPosition = (state: GameStore) => state.updateEnemyPosition
+export const selectUpdateEnemyHealth = (state: GameStore) => state.updateEnemyHealth
+export const selectRemoveEnemy = (state: GameStore) => state.removeEnemy

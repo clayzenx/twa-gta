@@ -13,15 +13,13 @@ export function useGameLogic() {
   const playerGameState = useGameStore(selectPlayerGameState)
   const enemies = useGameStore(selectEnemies)
   const input = useGameStore(selectInput)
-
-  console.log('useGameLogic.ts', player, playerGameState)
+  const setPlayerTarget = useGameStore(selectSetPlayerTarget)
+  const setPlayerAttacking = useGameStore(selectSetPlayerAttacking)
 
   // TODO: Описать норм валидацию
   if (!player) return { ready: false, reason: 'Player loading...' };
   if (!playerGameState) return { player, ready: false, reason: 'Player gamse state loading...' };
 
-  const setPlayerTarget = useGameStore(selectSetPlayerTarget)
-  const setPlayerAttacking = useGameStore(selectSetPlayerAttacking)
 
   // Мемоизируем позицию для избежания лишних объектов
   // const memoizedPosition = useMemo(() => ({
@@ -30,7 +28,7 @@ export function useGameLogic() {
   // }), [playerGameState.position.x, playerGameState.position.z])
 
   usePlayerMovement()
-  // usePlayerAttack()
+  usePlayerAttack()
   // useEnemyAI()
 
   // useAutoTarget({
@@ -43,9 +41,9 @@ export function useGameLogic() {
   // }); // для player
 
   // Основной игровой цикл TODO: мб не нужен
-  // useFrame((state, delta) => {
-  //   if (!gameRunning) return
-  // })
+  useFrame((state, delta) => {
+    if (!gameRunning) return
+  })
 
   // Возвращаем полезные данные для компонентов
   return {

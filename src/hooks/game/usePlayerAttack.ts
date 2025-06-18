@@ -1,5 +1,5 @@
 import { useGameStore } from "@/store/gameStore";
-import { selectEnemies, selectInput, selectPlayer, selectPlayerGameState, selectSetPlayerAttacking, selectEnemyActions } from "@/store/selectors";
+import { selectEnemies, selectInput, selectPlayer, selectPlayerGameState, selectSetPlayerAttacking, selectUpdateEnemyHealth, selectRemoveEnemy } from "@/store/selectors";
 import { useFrame } from "@react-three/fiber";
 
 const TAG = '[usePlayerAttack]'
@@ -11,14 +11,16 @@ export function usePlayerAttack() {
   const enemies = useGameStore(selectEnemies);
 
   const setPlayerAttacking = useGameStore(selectSetPlayerAttacking);
-  const { updateHealth, removeEnemy } = useGameStore(selectEnemyActions);
+  const updateEnemyHealth = useGameStore(selectUpdateEnemyHealth);
+  const removeEnemy = useGameStore(selectRemoveEnemy);
 
   if (!player) throw new Error(`${TAG}: player does not exist`)
   if (!playerGameState) throw new Error(`${TAG}: player hame state does not exist`)
 
+  console.log('usePlayerAttack', input, playerGameState, player, enemies, setPlayerAttacking);
+
   useFrame(() => {
     if (!input.attackPressed) return;
-    console.log('usePlayerAttack')
 
     const now = Date.now();
     if (now - playerGameState.lastAttackTime < 800) return;
@@ -35,7 +37,7 @@ export function usePlayerAttack() {
         if (newHealth <= 0) {
           removeEnemy(enemy.id);
         } else {
-          updateHealth(enemy.id, newHealth);
+          updateEnemyHealth(enemy.id, newHealth);
         }
         hasAttacked = true;
       }

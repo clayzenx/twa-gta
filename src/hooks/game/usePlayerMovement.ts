@@ -15,7 +15,6 @@ export function usePlayerMovement() {
 
   useFrame((_, delta) => {
     if (!input.isMoving) return;
-    console.log('usePlayerMovement')
 
     const speed = playerGameState.isAttacking ? player.movementSpeed / 1.4 : player.movementSpeed;
     const newPosition = {
