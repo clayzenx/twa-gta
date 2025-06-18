@@ -15,6 +15,8 @@ export function useGameLogic() {
   const enemies = useGameStore(selectEnemies)
   const input = useGameStore(selectInput)
 
+  console.log('useGameLogic.ts', player)
+
   if (!player) return { ready: false, reason: 'Player loading...' };
   if (!playerGameState) return { ready: false, reason: 'Player gamse state loading...' };
 
