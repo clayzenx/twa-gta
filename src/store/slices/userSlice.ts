@@ -19,7 +19,8 @@ export type User = {
 export type GameState = {
   targetId: string | null
   position: Position,
-  isAttacking: boolean
+  isAttacking: boolean,
+  lastAttackTime: number
 }
 
 export type PlayerData = {
@@ -74,7 +75,8 @@ export const createUserSlice: StateCreator<
         gameState: {
           targetId: null,
           position: { x: 0, z: 0 },
-          isAttacking: false
+          isAttacking: false,
+          lastAttackTime: -1
         },
       }
     })),

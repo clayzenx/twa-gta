@@ -30,7 +30,7 @@ export function useAutoTarget<T extends { id: string; position: Position }>({
   onTargetChanged
 }: UseAutoTargetProps<T>) {
   // Оптимизированная мемоизация ключа целей для избежания ненужных ререндеров
-  const targetsKey = useMemo(() => 
+  const targetsKey = useMemo(() =>
     targets.map((t) => `${t.id}:${t.position.x},${t.position.z}`).join("|"),
     [targets]
   );

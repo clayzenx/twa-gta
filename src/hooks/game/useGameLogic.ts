@@ -5,30 +5,31 @@ import { useAutoTarget } from '@/hooks/game/useAutoTarget'
 import { usePlayerMovement } from '@/hooks/game/usePlayerMovement'
 import { usePlayerAttack } from '@/hooks/game/usePlayerAttack'
 import { useEnemyAI } from '@/hooks/game/useEnemyAI'
-import { selectUser } from '@/store/selectors/playerSelectors'
 
 export function useGameLogic() {
   const gameRunning = useGameStore(selectGameRunning)
   const player = useGameStore(selectPlayer)
   const playerGameState = useGameStore(selectPlayerGameState)
-  const user = useGameStore(selectUser)
   const enemies = useGameStore(selectEnemies)
   const input = useGameStore(selectInput)
 
   console.log('useGameLogic.ts', player, playerGameState)
 
+  // TODO: Описать норм валидацию
   if (!player) return { ready: false, reason: 'Player loading...' };
   if (!playerGameState) return { player, ready: false, reason: 'Player gamse state loading...' };
-
-  console.log('useGameLogic', player, user, playerGameState);
 
   const setPlayerTarget = useGameStore(selectSetPlayerTarget)
   const setPlayerAttacking = useGameStore(selectSetPlayerAttacking)
 
+  console.log('usePlayerMovement()')
   usePlayerMovement()
+  console.log('usePlayerAttack()')
   usePlayerAttack()
+  console.log('useEnemyAI()')
   useEnemyAI()
 
+  console.log('useAutoTarget()')
   useAutoTarget({
     selfPosition: playerGameState.position,
     currentTargetId: playerGameState.targetId,
