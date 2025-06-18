@@ -13,9 +13,9 @@ export function usePlayerMovement() {
   if (!player) throw new Error(`${TAG}: player does not exist`)
   if (!playerGameState) throw new Error(`${TAG}: player hame state does not exist`)
 
-  console.log('usePlayerMovement vrode norm')
   useFrame((_, delta) => {
     if (!input.isMoving) return;
+    console.log('usePlayerMovement')
 
     const speed = playerGameState.isAttacking ? player.movementSpeed / 1.4 : player.movementSpeed;
     const newPosition = {

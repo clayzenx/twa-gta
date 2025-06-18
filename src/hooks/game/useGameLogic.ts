@@ -24,28 +24,28 @@ export function useGameLogic() {
   const setPlayerAttacking = useGameStore(selectSetPlayerAttacking)
 
   // Мемоизируем позицию для избежания лишних объектов
-  const memoizedPosition = useMemo(() => ({
-    x: playerGameState.position.x,
-    z: playerGameState.position.z
-  }), [playerGameState.position.x, playerGameState.position.z])
+  // const memoizedPosition = useMemo(() => ({
+  //   x: playerGameState.position.x,
+  //   z: playerGameState.position.z
+  // }), [playerGameState.position.x, playerGameState.position.z])
 
   usePlayerMovement()
-  usePlayerAttack()
-  useEnemyAI()
+  // usePlayerAttack()
+  // useEnemyAI()
 
-  useAutoTarget({
-    selfPosition: memoizedPosition,
-    currentTargetId: playerGameState.targetId,
-    range: player.attackRange,
-    targets: enemies,
-    setTarget: setPlayerTarget,
-    onTargetChanged: setPlayerAttacking
-  }); // для player
+  // useAutoTarget({
+  //   selfPosition: memoizedPosition,
+  //   currentTargetId: playerGameState.targetId,
+  //   range: player.attackRange,
+  //   targets: enemies,
+  //   setTarget: setPlayerTarget,
+  //   onTargetChanged: setPlayerAttacking
+  // }); // для player
 
-  // Основной игровой цикл
-  useFrame((state, delta) => {
-    if (!gameRunning) return
-  })
+  // Основной игровой цикл TODO: мб не нужен
+  // useFrame((state, delta) => {
+  //   if (!gameRunning) return
+  // })
 
   // Возвращаем полезные данные для компонентов
   return {

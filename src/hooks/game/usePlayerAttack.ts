@@ -16,9 +16,9 @@ export function usePlayerAttack() {
   if (!player) throw new Error(`${TAG}: player does not exist`)
   if (!playerGameState) throw new Error(`${TAG}: player hame state does not exist`)
 
-  console.log('usePlayerAttack vrode norm')
   useFrame(() => {
     if (!input.attackPressed) return;
+    console.log('usePlayerAttack')
 
     const now = Date.now();
     if (now - playerGameState.lastAttackTime < 800) return;
