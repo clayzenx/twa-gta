@@ -6,9 +6,10 @@ import { Character } from '@/types/game';
  */
 export function handlePlayerHit() {
   const state = store.getState();
-  const { player, enemies, updateEnemyHealth, removeEnemy } = state;
+  const { enemies, updateEnemyHealth, removeEnemy } = state;
+  const player = state.getPlayerCharacter();
 
-  if (!player.targetId) return;
+  if (!player?.targetId) return;
 
   const enemy = enemies.find(e => e.id === player.targetId)
 

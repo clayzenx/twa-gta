@@ -1,8 +1,10 @@
 import { StateCreator } from 'zustand'
 import { Character, Position } from '@/types/game'
+import { sanitizeHealth, sanitizePosition } from '@/utils/validation'
+import { GAME_CONSTANTS } from '@/constants/game'
 
 export type User = {
-  id: number
+  id: string
   telegramId: string
   firstName: string
   lastName: string
@@ -48,10 +50,17 @@ export interface UserSlice {
   setLoading: (loading: boolean) => void
   updateUserBalance: (balance: number) => void
 
-  // Player actions  
+  // Player data
   updatePlayerData: (stats: Partial<PlayerData>) => void
   initializePlayerData: (player: PlayerData) => void
+
+  // Player Game State
   initializePvEGameState: () => void
+  updatePlayerPosition: (position: Position) => void
+  updatePlayerHealth: (health: number) => void
+  setPlayerTarget: (targetId: string | null) => void
+  setPlayerAttacking: (isAttacking: boolean) => void
+  resetPlayerAttack: () => void
 
   // Selectors
   getPlayerCharacter: () => Character | null
@@ -76,9 +85,75 @@ export const createUserSlice: StateCreator<
           targetId: null,
           position: { x: 0, z: 0 },
           isAttacking: false,
-          lastAttackTime: -1
+          lastAttackTime: 0
         },
       }
+    })),
+
+  updatePlayerPosition: (position: Position) =>
+    set((state) => ({
+      user: state.user && state.user.gameState
+        ? {
+          ...state.user,
+          gameState: {
+            ...state.user.gameState,
+            position: sanitizePosition(position)
+          }
+        }
+        : state.user
+    })),
+
+  updatePlayerHealth: (health: number) =>
+    set((state) => ({
+      user: state.user && state.user.player
+        ? {
+          ...state.user,
+          player: {
+            ...state.user.player,
+            health: sanitizeHealth(health, state.user.player.maxHealth)
+          }
+        }
+        : state.user
+    })),
+
+  setPlayerTarget: (targetId: string | null) =>
+    set((state) => ({
+      user: state.user && state.user.gameState
+        ? {
+          ...state.user,
+          gameState: {
+            ...state.user.gameState,
+            targetId
+          }
+        }
+        : state.user
+    })),
+
+  setPlayerAttacking: (isAttacking: boolean) =>
+    set((state) => ({
+      user: state.user && state.user.gameState
+        ? {
+          ...state.user,
+          gameState: {
+            ...state.user.gameState,
+            isAttacking,
+            lastAttackTime: isAttacking ? Date.now() : state.user.gameState.lastAttackTime
+          }
+        }
+        : state.user
+    })),
+
+  resetPlayerAttack: () =>
+    set((state) => ({
+      user: state.user && state.user.gameState
+        ? {
+          ...state.user,
+          gameState: {
+            ...state.user.gameState,
+            isAttacking: false
+          }
+        }
+        : state.user
     })),
 
   setLoading: (loading) => set({ isLoading: loading }),
@@ -107,19 +182,20 @@ export const createUserSlice: StateCreator<
 
   getPlayerCharacter: () => {
     const state = get()
-    if (!state.user?.player) return null
+    if (!state.user?.player || !state.user?.gameState) return null
 
     const player = state.user.player
+    const gameState = state.user.gameState
     return {
-      position: { x: 0, z: 0 }, // позиция хранится в игровом состоянии
-      targetId: null,
+      position: gameState.position,
+      targetId: gameState.targetId,
       health: player.health,
       maxHealth: player.maxHealth,
       attackRange: player.attackRange,
       speed: player.movementSpeed,
       baseDamage: player.damage,
-      isAttacking: false,
-      lastAttackTime: 0
+      isAttacking: gameState.isAttacking,
+      lastAttackTime: gameState.lastAttackTime
     }
   }
 })

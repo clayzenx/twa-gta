@@ -12,25 +12,25 @@ export const selectPlayerExperience = (state: GameStore) => state.user?.player?.
 export const selectPlayerMaxHealth = (state: GameStore) => state.user?.player?.maxHealth ?? 100
 
 // Game player selectors (current game state)
-export const selectPlayer = (state: GameStore) => state.player
-export const selectPlayerPosition = (state: GameStore) => state.player.position
-export const selectPlayerHealth = (state: GameStore) => state.player.health
-export const selectPlayerIsAttacking = (state: GameStore) => state.player.isAttacking
-export const selectPlayerTarget = (state: GameStore) => state.player.targetId
+export const selectPlayer = (state: GameStore) => state.getPlayerCharacter()
+export const selectPlayerPosition = (state: GameStore) => state.user?.gameState?.position
+export const selectPlayerHealth = (state: GameStore) => state.user?.player?.health
+export const selectPlayerIsAttacking = (state: GameStore) => state.user?.gameState?.isAttacking
+export const selectPlayerTarget = (state: GameStore) => state.user?.gameState?.targetId
 
 // Combined selectors
 export const selectPlayerHealthPercentage = (state: GameStore) => {
-  const health = state.player.health
-  const maxHealth = state.player.maxHealth
+  const health = state.user?.player?.health ?? 0
+  const maxHealth = state.user?.player?.maxHealth ?? 100
   return maxHealth > 0 ? (health / maxHealth) * 100 : 0
 }
 
 export const selectPlayerStats = (state: GameStore) => ({
-  health: state.player.health,
-  maxHealth: state.player.maxHealth,
-  damage: state.player.baseDamage,
-  attackRange: state.player.attackRange,
-  speed: state.player.speed,
+  health: state.user?.player?.health ?? 0,
+  maxHealth: state.user?.player?.maxHealth ?? 100,
+  damage: state.user?.player?.damage ?? 0,
+  attackRange: state.user?.player?.attackRange ?? 1,
+  speed: state.user?.player?.movementSpeed ?? 1,
   level: state.user?.player?.level ?? 1,
   experience: state.user?.player?.experience ?? 0
 })

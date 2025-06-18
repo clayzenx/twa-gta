@@ -10,10 +10,10 @@ export const selectStartGame = (state: GameStore) => state.startGame
 export const selectStopGame = (state: GameStore) => state.stopGame
 
 // Составные селекторы для избежания лишних ререндеров
-export const selectPlayerPosition = (state: GameStore) => state.player.position
-export const selectPlayerHealth = (state: GameStore) => state.player.health
-export const selectPlayerTarget = (state: GameStore) => state.player.targetId
-export const selectPlayerAttacking = (state: GameStore) => state.player.isAttacking
+export const selectPlayerPosition = (state: GameStore) => state.user?.gameState?.position
+export const selectPlayerHealth = (state: GameStore) => state.user?.player?.health
+export const selectPlayerTarget = (state: GameStore) => state.user?.gameState?.targetId
+export const selectPlayerAttacking = (state: GameStore) => state.user?.gameState?.isAttacking
 
 export const selectMovement = (state: GameStore) => state.input.movement
 export const selectIsMoving = (state: GameStore) => state.input.isMoving

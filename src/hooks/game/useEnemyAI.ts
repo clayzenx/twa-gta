@@ -11,6 +11,8 @@ export function useEnemyAI() {
   const updatePlayerHealth = useGameStore(selectUpdatePlayerHealth)
 
   useFrame((_, delta) => {
+    if (!player) return;
+    
     enemies.forEach((enemy) => {
       const dx = player.position.x - enemy.position.x;
       const dz = player.position.z - enemy.position.z;
