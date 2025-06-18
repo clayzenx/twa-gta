@@ -4,7 +4,7 @@ import { GameCanvas } from "@/components/game/GameCanvas";
 import { Loader } from "@react-three/drei"
 import { FlexBoxCol, StyledApp, AppContainer } from "@/components/styled/styled";
 import "@twa-dev/sdk";
-import { UserProvider } from '@/context/UserContext';
+import { AppInitProvider } from '@/components/providers/AppInitProvider';
 import { ActivitiesProvider } from '@/context/ActivitiesContext';
 import { useGameStore } from "./store/gameStore";
 import { selectGameRunning } from "./store/selectors";
@@ -13,7 +13,7 @@ function App() {
   const gameRunning = useGameStore(selectGameRunning)
 
   return (
-    <UserProvider>
+    <AppInitProvider>
       <ActivitiesProvider>
         <StyledApp>
           <Loader />
@@ -25,7 +25,7 @@ function App() {
           </AppContainer>
         </StyledApp>
       </ActivitiesProvider>
-    </UserProvider>
+    </AppInitProvider>
   );
 }
 

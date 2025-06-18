@@ -2,6 +2,7 @@ import { StateCreator } from 'zustand'
 import { Character, Position } from '@/types/game'
 import { GAME_CONSTANTS } from '@/constants/game'
 import { sanitizeHealth, sanitizePosition } from '@/utils/validation'
+import { PlayerData } from './userSlice'
 
 export interface PlayerSlice {
   player: Character
@@ -12,9 +13,10 @@ export interface PlayerSlice {
   setPlayerTarget: (targetId: string | null) => void
   setPlayerAttacking: (isAttacking: boolean) => void
   resetPlayerAttack: () => void
+  initializeFromPlayerData: (playerData: PlayerData) => void
 }
 
-const initialPlayerState: Character = {
+const getInitialPlayerState = (): Character => ({
   targetId: null,
   position: { x: 0, z: 0 },
   health: GAME_CONSTANTS.PLAYER.INITIAL_HEALTH,
@@ -24,7 +26,7 @@ const initialPlayerState: Character = {
   baseDamage: GAME_CONSTANTS.PLAYER.BASE_DAMAGE,
   isAttacking: false,
   lastAttackTime: 0
-}
+})
 
 export const createPlayerSlice: StateCreator<
   PlayerSlice,
@@ -32,7 +34,7 @@ export const createPlayerSlice: StateCreator<
   [],
   PlayerSlice
 > = (set, get) => ({
-  player: initialPlayerState,
+  player: getInitialPlayerState(),
 
   setPlayerTarget: (targetId: string | null) =>
     set(
@@ -81,6 +83,20 @@ export const createPlayerSlice: StateCreator<
         player: {
           ...state.player,
           isAttacking: false
+        }
+      })
+    ),
+
+  initializeFromPlayerData: (playerData: PlayerData) =>
+    set(
+      (state) => ({
+        player: {
+          ...state.player,
+          health: playerData.health,
+          maxHealth: playerData.maxHealth,
+          attackRange: playerData.attackRange,
+          speed: playerData.movementSpeed,
+          baseDamage: playerData.damage
         }
       })
     )

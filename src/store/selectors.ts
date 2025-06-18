@@ -1,7 +1,8 @@
 import { GameStore } from './gameStore'
 
 // Селекторы для оптимизации производительности
-export const selectPlayer = (state: GameStore) => state.player
+export const selectPlayer = (state: GameStore) => state.user?.player
+export const selectPlayerGameState = (state: GameStore) => state.user?.gameState
 export const selectEnemies = (state: GameStore) => state.enemies
 export const selectInput = (state: GameStore) => state.input
 export const selectGameRunning = (state: GameStore) => state.gameRunning

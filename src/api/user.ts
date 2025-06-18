@@ -1,4 +1,4 @@
-import { User } from "@/context/UserContext"
+import { User } from "@/store/slices/userSlice"
 import { api } from "."
 
 const TAG = '[user]'

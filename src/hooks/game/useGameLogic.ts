@@ -1,16 +1,24 @@
 import { useFrame } from '@react-three/fiber'
 import { useGameStore } from '@/store/gameStore'
-import { selectPlayer, selectEnemies, selectInput, selectGameRunning, selectSetPlayerTarget, selectSetPlayerAttacking } from '@/store/selectors'
+import { selectPlayer, selectEnemies, selectInput, selectGameRunning, selectSetPlayerTarget, selectSetPlayerAttacking, selectPlayerGameState } from '@/store/selectors'
 import { useAutoTarget } from '@/hooks/game/useAutoTarget'
 import { usePlayerMovement } from '@/hooks/game/usePlayerMovement'
 import { usePlayerAttack } from '@/hooks/game/usePlayerAttack'
 import { useEnemyAI } from '@/hooks/game/useEnemyAI'
+import { selectUser } from '@/store/selectors/playerSelectors'
 
 export function useGameLogic() {
   const gameRunning = useGameStore(selectGameRunning)
   const player = useGameStore(selectPlayer)
+  const playerGameState = useGameStore(selectPlayerGameState)
+  const user = useGameStore(selectUser)
   const enemies = useGameStore(selectEnemies)
   const input = useGameStore(selectInput)
+
+  if (!player) return { ready: false, reason: 'Player loading...' };
+  if (!playerGameState) return { ready: false, reason: 'Player gamse state loading...' };
+
+  console.log('useGameLogic', player, user);
 
   const setPlayerTarget = useGameStore(selectSetPlayerTarget)
   const setPlayerAttacking = useGameStore(selectSetPlayerAttacking)
@@ -20,8 +28,8 @@ export function useGameLogic() {
   useEnemyAI()
 
   useAutoTarget({
-    selfPosition: player.position,
-    currentTargetId: player.targetId,
+    selfPosition: playerGameState.position,
+    currentTargetId: playerGameState.targetId,
     range: player.attackRange,
     targets: enemies,
     setTarget: setPlayerTarget,
@@ -36,6 +44,7 @@ export function useGameLogic() {
   // Возвращаем полезные данные для компонентов
   return {
     player,
+    playerGameState,
     enemies,
     gameRunning,
     // Вычисляемые значения

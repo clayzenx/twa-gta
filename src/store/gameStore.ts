@@ -4,8 +4,9 @@ import { createPlayerSlice, PlayerSlice } from './slices/playerSlice'
 import { createEnemiesSlice, EnemiesSlice } from './slices/enemiesSlice'
 import { createInputSlice, InputSlice } from './slices/inputSlice'
 import { createGameSlice, GameSlice } from './slices/gameSlice'
+import { createUserSlice, UserSlice } from './slices/userSlice'
 
-export type GameStore = PlayerSlice & EnemiesSlice & InputSlice & GameSlice
+export type GameStore = PlayerSlice & EnemiesSlice & InputSlice & GameSlice & UserSlice
 
 const store = create<GameStore>()(
   devtools(
@@ -13,7 +14,8 @@ const store = create<GameStore>()(
       ...createPlayerSlice(...args),
       ...createEnemiesSlice(...args),
       ...createInputSlice(...args),
-      ...createGameSlice(...args)
+      ...createGameSlice(...args),
+      ...createUserSlice(...args)
     }),
     {
       name: 'game-store'

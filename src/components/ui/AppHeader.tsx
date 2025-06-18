@@ -4,13 +4,13 @@ import { Avatar } from "@/components/ui/Avatar";
 import { CHAIN } from "@tonconnect/protocol";
 
 import { useTonConnect } from "@/hooks/ton/useTonConnect";
-import { useUser } from "@/context/UserContext"
 import { useGameStore } from "@/store/gameStore";
 import { selectStartGame, selectStopGame, selectGameRunning } from "@/store/selectors";
+import { selectUser } from "@/store/selectors/playerSelectors";
 
 export function AppHeader() {
   const { network } = useTonConnect();
-  const { user } = useUser()
+  const user = useGameStore(selectUser)
 
   const gameRunning = useGameStore(selectGameRunning)
   const startGame = useGameStore(selectStartGame)

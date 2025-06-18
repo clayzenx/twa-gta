@@ -12,18 +12,20 @@ import { useMobileInput } from '../../hooks/input/useMobileInput'
 import { useErrorBoundary } from 'use-error-boundary'
 import { Environment } from '@react-three/drei'
 
-// Основная игровая логика теперь в отдельном компоненте
+// Основная игровая логика
 function GameLogic() {
-  const { player, enemies, playerRotation, isMoving } = useGameLogic()
+  const { player, playerGameState, enemies, playerRotation, isMoving } = useGameLogic()
+
+  if (!player) throw new Error('Player does not exist')
 
   return (
     <>
-      <IsometricCamera target={player.position} />
+      <IsometricCamera target={playerGameState.position} />
       <Terrain />
       <Player
-        position={player.position}
+        position={playerGameState.position}
         isMoving={isMoving}
-        isAttacking={player.isAttacking}
+        isAttacking={playerGameState.isAttacking}
         health={player.health}
         maxHealth={player.maxHealth}
         rotation={playerRotation}
@@ -32,13 +34,13 @@ function GameLogic() {
         <Enemy
           key={enemy.id}
           enemy={enemy}
-          playerPosition={player.position}
+          playerPosition={playerGameState.position}
           onAttack={() => { }} // Теперь обрабатывается в useGameLogic
         />
       ))}
 
       <GameUI
-        playerPosition={player.position}
+        playerPosition={playerGameState.position}
         playerHealth={player.health}
         enemyCount={enemies.length}
       />
